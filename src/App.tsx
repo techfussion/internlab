@@ -1,11 +1,11 @@
 import './App.css'
-import Nav from './layout/Nav'
+import Home from './pages/Home'
 
 function App() {
 
   return (
     <>
-      <Nav />
+      <Home />
     </>
   )
 }
