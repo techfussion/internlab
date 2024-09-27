@@ -8,7 +8,7 @@ export interface ButtonProps {
     color?: string;
     text: string;
     type?: "button" | "submit" | "reset";
-    onClick: () => void;
+    onClick?: () => void;
 }
 
 const Button: React.FC<ButtonProps> = ({ text, onClick, startIcon, endIcon, type, clear, fill, color }) => {
