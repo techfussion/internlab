@@ -10,7 +10,7 @@ const SearchBar: React.FC = () => {
             </div>
             <div className="flex gap-1">
                 <img src={icons.location} alt="location" className="w-3"/>
-                <select className="border-b text-textDarkBlue1 opacity-90">
+                <select className="border-b text-textDarkBlue1 opacity-90 outline-0">
                     <option>Lokoja, Kogi</option>
                     <option>Ikoyi, Lagos</option>
                     <option>Maitama, Abuja</option>
