@@ -20,11 +20,11 @@ const Home: React.FC = () => {
             <div className="bg-customGray1 pb-10">
                 <Nav />
                 <section className="flex justify-center flex-col px-16 mt-8">
-                    <h1 className="text-5xl text-textDarkBlue1 leading-tight font-bold">Discover <br /> more than <br /> <span className="text-textBlue2">5000+ Placements</span></h1>
+                    <h1 className="text-6xl text-textDarkBlue1 leading-tight font-bold">Discover <br /> more than <br /> <span className="text-textBlue2">5000+ Placements</span></h1>
                     <img src={Dashes} alt="line" className="w-96"/>
-                    <p className="opacity-70 text-sm text-textGray3 w-4/12 my-3">Great platform for the job seeker that searching for new career heights and passionate about startups.</p>
+                    <p className="opacity-70 text-sm text-textGray3 w-4/12 my-6">Great platform for the job seeker that searching for new career heights and passionate about startups.</p>
                     <SearchBar />
-                    <p className="text-xs text-textBlack1 mt-3 opacity-70">Popular : <a href="#">UI Designer</a>, <a href="#">UX Researcher</a>, <a href="#">Admin</a></p>
+                    <p className="text-xs text-textBlack1 mt-4 opacity-70">Popular : <a href="#" className="text-textBlue1">UI Designer</a>, <a href="#" className="text-textBlue1">UX Researcher</a>, <a href="#" className="text-textBlue1">Admin</a></p>
                 </section>
             </div>
             <section className="px-16 pb-10">
@@ -39,15 +39,15 @@ const Home: React.FC = () => {
                     </div>
                 </div>
             </section>
-            <section className="px-16 mt-8 pb-10">
+            <section className="px-16 mt-10 pb-10">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-3xl text-textDarkBlue1 font-bold">Explore by <span className="text-textBlue2">category</span></h2>
+                    <h2 className="text-4xl text-textDarkBlue1 font-bold">Explore by <span className="text-textBlue2">category</span></h2>
                     <div className="flex gap-2">
                         <p className="text-xs text-textBlue1 cursor-pointer">Show all</p>
                         <img src={icons.arrowRightBlue} alt="arrow" className="w-2"/>
                     </div>
                 </div>
-                <div className="flex flex-wrap justify-between mt-5">
+                <div className="flex flex-wrap gap-2 mt-5">
                     {category.map((item, index) => (
                         <div key={index} className="flex flex-col my-5 p-4 border w-56 cursor-pointer hover:scale-105">
                             <img src={item.img} alt="icon" className="w-8"/>
@@ -70,15 +70,15 @@ const Home: React.FC = () => {
                     <img className="relative right-0" src="https://picsum.photos/200/300" alt="image"/>               
                 </div>
             </section>
-            <section className="px-16 mt-8 pb-10">
+            <section className="px-16 mt-10 pb-10">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-3xl text-textDarkBlue1 font-bold">Popular <span className="text-textBlue2">companies</span></h2>
+                    <h2 className="text-4xl text-textDarkBlue1 font-bold">Popular <span className="text-textBlue2">companies</span></h2>
                     <div className="flex gap-2">
                         <p className="text-xs text-textBlue1 cursor-pointer">Show all</p>
                         <img src={icons.arrowRightBlue} alt="arrow" className="w-2"/>
                     </div>
                 </div>
-                <div className="flex flex-wrap justify-between mt-5">
+                <div className="flex flex-wrap gap-2 mt-5">
                     {popularCompanies.map((item, index) => (
                         <div key={index} className="flex flex-col my-5 p-4 border w-56 cursor-pointer hover:scale-105 z-[1] bg-white">
                             <div className="flex flex-col mb-5 gap-3">
@@ -94,16 +94,16 @@ const Home: React.FC = () => {
                     ))}
                 </div>
             </section>
-            <section className="px-16 mt-8 p-10 bg-customGray1 relative">
+            <section className="px-16 mt-10 p-10 bg-customGray1 relative">
                 <img src={pattern} alt="pattern" className="absolute top-0 right-0 w-2/4 h-full"/>
                 <div className="flex justify-between items-center">
-                    <h2 className="text-3xl text-textDarkBlue1 font-bold">Popular <span className="text-textBlue2">roles</span></h2>
+                    <h2 className="text-4xl text-textDarkBlue1 font-bold">Popular <span className="text-textBlue2">roles</span></h2>
                     <div className="flex gap-2">
                         <p className="text-xs text-textBlue1 cursor-pointer z-[1]">Show all</p>
                         <img src={icons.arrowRightBlue} alt="arrow" className="w-2"/>
                     </div>
                 </div>
-                <div className="flex flex-wrap justify-between mt-5">
+                <div className="flex flex-wrap gap-2 mt-5">
                     {popularRoles.map((item, index) => (
                         <div key={index} className="flex flex-col my-5 p-4 border w-56 cursor-pointer hover:scale-105 z-[1] bg-white">
                             <div className="flex justify-between mb-5">
