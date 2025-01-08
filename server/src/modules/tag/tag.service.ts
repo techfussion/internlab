@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTagDto, UpdateTagDto, FindAllTagsDto } from './dto/tag.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class TagService {
@@ -23,11 +24,11 @@ export class TagService {
   async findAll(query: FindAllTagsDto) {
     const { skip, take, search } = query;
 
-    const where = search
+    const where: Prisma.TagWhereInput = search
       ? {
           name: {
             contains: search,
-            mode: 'insensitive',
+            mode: Prisma.QueryMode.insensitive,
           },
         }
       : {};

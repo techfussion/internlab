@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUserDto, FindAllUsersDto } from './dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -28,13 +29,13 @@ export class UsersService {
   async findAll(query: FindAllUsersDto) {
     const { skip, take, search } = query;
     
-    const where = search
+    const where: Prisma.UserWhereInput = search
       ? {
           OR: [
-            { email: { contains: search, mode: 'insensitive' } },
-            { fullName: { contains: search, mode: 'insensitive' } },
-            { institution: { contains: search, mode: 'insensitive' } },
-            { department: { contains: search, mode: 'insensitive' } },
+            { email: { contains: search, mode: Prisma.QueryMode.insensitive } },
+            { fullName: { contains: search, mode: Prisma.QueryMode.insensitive } },
+            { institution: { contains: search, mode: Prisma.QueryMode.insensitive } },
+            { department: { contains: search, mode: Prisma.QueryMode.insensitive } },
           ],
         }
       : {};

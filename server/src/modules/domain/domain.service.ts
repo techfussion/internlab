@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDomainDto, UpdateDomainDto, FindAllDomainsDto } from './dto/domain.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class DomainService {
@@ -29,19 +30,80 @@ export class DomainService {
     });
   }
 
+  // async findAll(query: FindAllDomainsDto) {
+  //   const { skip, take, search, active, stipend, companyId, tag } = query;
+
+  //   const where = {
+  //     ...(active !== undefined && { active }),
+  //     ...(stipend !== undefined && { stipend }),
+  //     ...(companyId && { companyId }),
+  //     ...(tag && {
+  //       tags: {
+  //         some: {
+  //           id: tag,
+  //         },
+  //       },
+  //     }),
+  //     ...(search && {
+  //       OR: [
+  //         { name: { contains: search, mode: 'insensitive' } },
+  //         { description: { contains: search, mode: 'insensitive' } },
+  //         { requirements: { contains: search, mode: 'insensitive' } },
+  //         { company: { name: { contains: search, mode: 'insensitive' } } },
+  //       ],
+  //     }),
+  //   };
+
+  //   const [domains, total] = await Promise.all([
+  //     this.prisma.domain.findMany({
+  //       where,
+  //       skip,
+  //       take,
+  //       include: {
+  //         company: {
+  //           select: {
+  //             id: true,
+  //             name: true,
+  //             logo: true,
+  //           },
+  //         },
+  //         tags: true,
+  //         _count: {
+  //           select: {
+  //             bookmarks: true,
+  //           },
+  //         },
+  //       },
+  //       orderBy: {
+  //         createdAt: 'desc',
+  //       },
+  //     }),
+  //     this.prisma.domain.count({ where }),
+  //   ]);
+
+  //   return {
+  //     domains,
+  //     meta: {
+  //       total,
+  //       skip,
+  //       take,
+  //     },
+  //   };
+  // }
+
   async findAll(query: FindAllDomainsDto) {
     const { skip, take, search, active, stipend, companyId, tag } = query;
-
-    const where = {
-      ...(active !== undefined && { active }),
-      ...(stipend !== undefined && { stipend }),
-      ...(companyId && { companyId }),
+  
+    const whereClause: Prisma.DomainWhereInput = {
+      active: active,
+      stipend: stipend,
+      companyId: companyId || undefined,
       ...(tag && {
         tags: {
           some: {
-            id: tag,
-          },
-        },
+            id: tag
+          }
+        }
       }),
       ...(search && {
         OR: [
@@ -49,13 +111,13 @@ export class DomainService {
           { description: { contains: search, mode: 'insensitive' } },
           { requirements: { contains: search, mode: 'insensitive' } },
           { company: { name: { contains: search, mode: 'insensitive' } } },
-        ],
-      }),
+        ]
+      })
     };
-
+  
     const [domains, total] = await Promise.all([
       this.prisma.domain.findMany({
-        where,
+        where: whereClause,
         skip,
         take,
         include: {
@@ -77,9 +139,9 @@ export class DomainService {
           createdAt: 'desc',
         },
       }),
-      this.prisma.domain.count({ where }),
+      this.prisma.domain.count({ where: whereClause }),
     ]);
-
+  
     return {
       domains,
       meta: {

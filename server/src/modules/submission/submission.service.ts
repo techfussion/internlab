@@ -8,6 +8,7 @@ import {
   SubmissionType,
   SubmissionStatus,
 } from './dto/submission.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SubmissionService {
@@ -22,9 +23,12 @@ export class SubmissionService {
     const submission = await this.prisma.submission.create({
       data: {
         type,
-        data,
+        data: data as unknown as Prisma.InputJsonValue,
         userId,
-        companyId: companyId || (type === SubmissionType.NEW_COMPANY ? null : 'companyId' in data ? data.companyId : null),
+        companyId: companyId || 
+        (type === SubmissionType.NEW_COMPANY 
+          ? null 
+          : 'companyId' in data ? String(data.companyId) : null),
         status: SubmissionStatus.PENDING,
       },
       include: {

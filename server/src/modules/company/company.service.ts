@@ -5,6 +5,7 @@ import { CreateCompanyDto, UpdateCompanyDto, FindAllCompaniesDto, CompanyOrderBy
 import { PageDto } from '../common/dto/page.dto';
 import { Order } from '../common/dto/page-options.dto';
 import { PageMetaDto } from '../common/dto/page-meta.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CompanyService extends BaseService {
@@ -72,46 +73,45 @@ export class CompanyService extends BaseService {
     return new PageDto(companies, pageMetaDto);
   }
 
-  private buildWhereClause(dto: FindAllCompaniesDto) {
-    const where: any = {};
-
+  private buildWhereClause(dto: FindAllCompaniesDto): Prisma.CompanyWhereInput {
+    const where: Prisma.CompanyWhereInput = {};
+  
     if (dto.search) {
       where.OR = [
         { name: { contains: dto.search, mode: 'insensitive' } },
         { description: { contains: dto.search, mode: 'insensitive' } },
       ];
     }
-
+  
     if (dto.city) {
       where.city = { equals: dto.city, mode: 'insensitive' };
     }
-
+  
     if (dto.state) {
       where.state = { equals: dto.state, mode: 'insensitive' };
     }
-
+  
     if (dto.industryType?.length) {
-      where.industryType = { hasAny: dto.industryType };
+      where.industryType = { hasSome: dto.industryType };
     }
-
+  
     if (dto.verified !== undefined) {
       where.verified = dto.verified;
     }
-
+  
     return where;
   }
 
-  private buildOrderByClause(dto: FindAllCompaniesDto) {
-    const direction = dto.order === Order.ASC ? 'asc' : 'desc';
-
+  private buildOrderByClause(dto: FindAllCompaniesDto): Prisma.CompanyOrderByWithRelationInput {
     switch (dto.orderBy) {
-      case CompanyOrderBy.RATING:
-        return { avgRating: direction };
-      case CompanyOrderBy.REVIEWS:
-        return { totalReviews: direction };
-      case CompanyOrderBy.CREATED_AT:
+      case 'avgRating':
+        return { avgRating: dto.orderType };
+      case 'totalReviews':
+        return { totalReviews: dto.orderType };
+      case 'createdAt':
+        return { createdAt: dto.orderType };
       default:
-        return { createdAt: direction };
+        return { createdAt: 'desc' };
     }
   }
 

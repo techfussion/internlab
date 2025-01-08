@@ -1,6 +1,6 @@
 import { 
     Controller, Get, Post, Body, Patch, Param, Delete, 
-    Query, UseGuards, ValidationPipe
+    Query, UseGuards
   } from '@nestjs/common';
   import { CompanyService } from './company.service';
   import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';

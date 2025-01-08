@@ -2,10 +2,11 @@ import { PartialType } from '@nestjs/mapped-types';
 import { IsEnum, IsString, IsOptional, IsArray, IsUrl, IsEmail, IsPhoneNumber, IsDate, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PageOptionsDto } from 'src/modules/common/dto/page-options.dto';
+import { Prisma } from '@prisma/client';
 
 export enum CompanyOrderBy {
-  RATING = 'rating',
-  REVIEWS = 'reviews',
+  RATING = 'avgRating',
+  REVIEWS = 'totalReviews',
   CREATED_AT = 'createdAt'
 }
 
@@ -36,8 +37,13 @@ export class FindAllCompaniesDto extends PageOptionsDto {
   @IsOptional()
   @IsEnum(CompanyOrderBy)
   orderBy?: CompanyOrderBy = CompanyOrderBy.CREATED_AT;
+
+  @IsOptional()
+  @IsEnum(['asc', 'desc'])
+  orderType?: Prisma.SortOrder = 'desc';
 }
 
+// Rest of the DTOs remain unchanged
 export class CreateCompanyDto {
   @IsString()
   name: string;
