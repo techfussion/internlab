@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  password      String
+  fullName      String
+  institution   String?
+  department    String?
+  level         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  role          Role          @default(USER)
+  submissions   Submission[]
+  reviews       Review[]
+  bookmarks     Bookmark[]
+
+  @@index([fullName])
+  @@index([institution])
+  @@index([department])
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model Company {
+  id                      String         @id @default(cuid())
+  name                    String
+  description             String?        @db.Text
+  logo                    String?        
+  companyPhotos           String[]
+  website                 String?
+  email                   String?
+  phone                   String?
+  x                       String?
+  linkedIn                String?
+  instagram               String?
+  facebook                String?
+  address                 String?
+  city                    String
+  state                   String
+  country                 String
+  otherOfficeLocations    String[]
+  industryType            String[]
+  companySize             String?
+  established             DateTime?
+  techStacks              String[]
+  perks                   String[]
+  team                    String[]
+  verified                Boolean        @default(false)
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+  searchVector           Unsupported("tsvector")?
+  domains                Domain[]
+  reviews                Review[]
+  submissions            Submission[]
+  avgRating              Float?          // Denormalized field for quick access
+  totalReviews           Int             @default(0)
+
+  @@index([name])
+  @@index([city])
+  @@index([state])
+  @@index([country])
+  @@index([verified])
+  @@index([industryType])
+  @@index([techStacks])
+  @@index([avgRating])
+  @@index([totalReviews])
+  @@index([searchVector], type: Gin)
+}
+
+model Domain {
+  id            String         @id @default(cuid())
+  name          String
+  description   String?        @db.Text
+  requirements  String?        @db.Text
+  perks         String[]
+  stipend       Boolean        @default(false)
+  stipendAmount Decimal?
+  active        Boolean        @default(true)
+  company       Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId     String
+  tags          Tag[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  bookmarks     Bookmark[]
+  searchVector  Unsupported("tsvector")?
+
+  @@index([name])
+  @@index([active])
+  @@index([stipend])
+  @@index([companyId])
+  @@index([searchVector], type: Gin)
+}
+
+model Tag {
+  id            String         @id @default(cuid())
+  name          String         @unique
+  domains       Domain[]
+  count         Int            @default(0)  // Denormalized counter for popularity
+
+  @@index([name])
+  @@index([count])
+}
+
+model Review {
+  id            String         @id @default(cuid())
+  rating        Int           @db.SmallInt
+  comment       String?        @db.Text
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  company       Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId     String
+  verified      Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([userId, companyId])
+}
+
+model Submission {
+  id            String         @id @default(cuid())
+  type          SubmissionType
+  data          Json          // Stores the submitted changes
+  status        SubmissionStatus @default(PENDING)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  company       Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId     String
+  adminFeedback String?        @db.Text
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+enum SubmissionType {
+  NEW_COMPANY
+  UPDATE_COMPANY
+  NEW_DOMAIN
+  UPDATE_DOMAIN
+}
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Bookmark {
+  id            String         @id @default(cuid())
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  domain        Domain        @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  domainId      String
+  createdAt     DateTime       @default(now())
+
+  @@unique([userId, domainId])
+}
