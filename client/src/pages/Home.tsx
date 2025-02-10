@@ -1,12 +1,10 @@
 import React from "react";
 
-// Components
 import Footer from "@/components/layout/Footer";
 import { SectionHeader, HeroSection, CompanyLogos, CategoryGrid } from "./helpers";
 
 import pattern from "@/assets/Pattern.png";
 
-// Constants & Utils
 import {
   category,
   popularRoles,

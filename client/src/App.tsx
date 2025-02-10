@@ -6,6 +6,10 @@ import { AuthProvider } from '@/context/authContext';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { DataProvider } from '@/context/DataContext';
 import Profile from '@/pages/company/profile/Profile';
+import AdminDashboard from './pages/admin/Page';
+import { CompaniesManagement } from './pages/admin/company/Page';
+import { DomainsManagement } from './pages/admin/domain/Page';
+import SubmissionManagement from './pages/admin/submissions/Page';
 
 const App: React.FC = () => {
   return (
@@ -18,9 +22,14 @@ const App: React.FC = () => {
             <Route path="/companies" element={<BrowseCompany />} />
             <Route path="/companies/profile" element={<Profile />} />
 
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/companies" element={<CompaniesManagement />} />
+            <Route path="/admin/domains" element={<DomainsManagement />} />
+            <Route path="/admin/submissions" element={<SubmissionManagement />} />
+
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
-              <Route path="/engine/overview" element={<><p>Hello protected</p></>} />
+              <Route path="/adminn" element={<AdminDashboard />} />
             </Route>
           </Routes>
         </Router>

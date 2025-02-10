@@ -3,7 +3,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { z } from "zod";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -28,7 +27,6 @@ const Signup: React.FC = () => {
   const { toast } = useToast();
   const { setCredentials } = useAuth();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const form = useForm<SignupFormData>({
     resolver: zodResolver(formSchema),
@@ -45,9 +43,6 @@ const Signup: React.FC = () => {
   
         // Set credentials in AuthContext
         setCredentials(user, token);
-  
-        // Redirect to dashboard
-        navigate("/engine/overview");    
     } catch (error: any) {
         toast({
           variant: 'destructive',
@@ -63,7 +58,7 @@ const Signup: React.FC = () => {
       <div className="w-full max-w-lg p-6 bg-white-500s">
         <h2 className="text-2xl font-bold text-center mb-2">Welcome!</h2>
         <p className="text-sm text-gray-500 text-center mb-6">
-          Create a Logit account to experience a seamless electronic logbook system.
+          Create an account to enable internlab member features.
         </p>
 
         {/* Form */}
@@ -78,7 +73,7 @@ const Signup: React.FC = () => {
                     <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                        <Input placeholder="Enter your firstname" {...field} />
+                        <Input className="rounded-none" placeholder="Enter your firstname" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
@@ -93,7 +88,7 @@ const Signup: React.FC = () => {
                     <FormItem>
                     <FormLabel>Middle Name</FormLabel>
                     <FormControl>
-                        <Input placeholder="Enter your middlename" {...field} />
+                        <Input className="rounded-none" placeholder="Enter your middlename" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
@@ -108,7 +103,7 @@ const Signup: React.FC = () => {
                     <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                        <Input placeholder="Enter your lastname" {...field} />
+                        <Input className="rounded-none" placeholder="Enter your lastname" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
@@ -123,7 +118,7 @@ const Signup: React.FC = () => {
                     <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                        <Input placeholder="you@example.com" {...field} />
+                        <Input className="rounded-none" placeholder="you@example.com" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
@@ -138,7 +133,7 @@ const Signup: React.FC = () => {
                     <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                        <Input type="password" placeholder="********" {...field} />
+                        <Input className="rounded-none" type="password" placeholder="********" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
@@ -146,7 +141,7 @@ const Signup: React.FC = () => {
                 />
 
                 {/* Submit Button */}
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="rounded-none w-full bg-purple-500 hover:bg-purple-300" disabled={loading}>
                  {
                     loading
                     ? 'Signing up...'
@@ -172,7 +167,7 @@ const Signup: React.FC = () => {
 
         {/* Footer */}
         <p className="text-xs text-gray-400 text-center mt-4">
-          &copy; Logit. All rights reserved.
+          &copy; internlab. All rights reserved.
         </p>
       </div>
     </main>

@@ -25,6 +25,8 @@ model User {
   @@index([fullName])
   @@index([institution])
   @@index([department])
+
+  @@map("users")
 }
 
 enum Role {
@@ -76,6 +78,8 @@ model Company {
   @@index([avgRating])
   @@index([totalReviews])
   @@index([searchVector], type: Gin)
+
+  @@map("companies")
 }
 
 model Domain {
@@ -100,6 +104,8 @@ model Domain {
   @@index([stipend])
   @@index([companyId])
   @@index([searchVector], type: Gin)
+
+  @@map("domains")
 }
 
 model Tag {
@@ -110,6 +116,8 @@ model Tag {
 
   @@index([name])
   @@index([count])
+
+  @@map("tags")
 }
 
 model Review {
@@ -125,6 +133,8 @@ model Review {
   updatedAt     DateTime       @updatedAt
 
   @@unique([userId, companyId])
+
+  @@map("reviews")
 }
 
 model Submission {
@@ -139,6 +149,8 @@ model Submission {
   adminFeedback String?        @db.Text
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+
+  @@map("submission")
 }
 
 enum SubmissionType {
@@ -163,4 +175,6 @@ model Bookmark {
   createdAt     DateTime       @default(now())
 
   @@unique([userId, domainId])
+
+  @@map("bookmarks")
 }

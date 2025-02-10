@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import Signup from "@/components/layout/Signup";
-import Login from "@/components/layout/Login";
+import Profile from "../Profile";
 
 interface NavProps {
     className?: string;
@@ -25,30 +22,7 @@ const Nav: React.FC<NavProps> = ({ className }) => {
                     <Link to="/companies" className={`${style('/companies')}  hover:text-purple-500`}>Browse Companies</Link>
                 </ul>
             </div>
-            <div className="flex gap-2">
-                <Dialog>
-                    <DialogTrigger>
-                        <Button variant="link" className="text-purple-500 text-xs hover:text-purple-300">Login</Button>
-                    </DialogTrigger>
-                    <DialogContent className="bg-white-500">
-                        <DialogTitle >
-                            Login
-                        </DialogTitle>
-                        <Login />
-                    </DialogContent>
-                </Dialog>
-                <Dialog>
-                    <DialogTrigger>
-                        <Button className="rounded-none text-xs bg-purple-500 hover:bg-purple-300">Sign Up</Button>
-                    </DialogTrigger>
-                    <DialogContent className="bg-white-500">
-                        <DialogTitle>
-                            Sign Up
-                        </DialogTitle>
-                        <Signup />
-                    </DialogContent>
-                </Dialog>
-            </div>
+            <Profile />
         </nav>
     )
 }

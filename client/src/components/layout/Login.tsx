@@ -3,7 +3,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,7 +23,6 @@ const Login: React.FC = () => {
   const { toast } = useToast();
   const { setCredentials } = useAuth();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(formSchema),
@@ -41,9 +39,6 @@ const Login: React.FC = () => {
 
       // Set credentials in AuthContext
       setCredentials(user, token);
-
-      // Redirect to dashboard
-      navigate("/engine/overview");      
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -59,7 +54,7 @@ const Login: React.FC = () => {
       <div className="w-full max-w-lg p-6 bg-white-500">
         <h2 className="text-2xl font-bold text-center mb-2">Welcome Back!</h2>
         <p className="text-sm text-gray-500 text-center mb-6">
-          Sign in to your logit account to experience a seamless electronic logbook system.
+          Sign in to your internlab account to enable additional features.
         </p>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -71,7 +66,7 @@ const Login: React.FC = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="you@example.com" {...field} />
+                    <Input className="rounded-none" placeholder="you@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -86,7 +81,7 @@ const Login: React.FC = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="********" {...field} />
+                    <Input className="rounded-none" type="password" placeholder="********" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -94,7 +89,7 @@ const Login: React.FC = () => {
             />
 
             {/* Submit Button */}
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full bg-purple-500 hover:bg-purple-300 rounded-none" disabled={loading}>
               {
                 loading
                 ? 'Logging in...'
