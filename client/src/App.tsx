@@ -10,6 +10,7 @@ import AdminDashboard from './pages/admin/Page';
 import { CompaniesManagement } from './pages/admin/company/Page';
 import { DomainsManagement } from './pages/admin/domain/Page';
 import SubmissionManagement from './pages/admin/submissions/Page';
+import FindPlacemennt from './pages/company/FindJobs/FindPlacement';
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
+             <Route path="/Placements" element={<FindPlacemennt />} />
             <Route path="/companies" element={<BrowseCompany />} />
             <Route path="/companies/profile" element={<Profile />} />
 

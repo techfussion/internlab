@@ -94,6 +94,82 @@ export const popularCompanies = [
     },
 ];
 
+export const popularCompaniesJobs = [
+  {
+    id: '1',
+    title: "Software Engineer",
+    company: "Zainpay",
+    location: "Lagos, Nigeria",
+    type: "Full-Time",
+    tags: ["Engineering", "Fintech"],
+    logo: "/placeholder.svg",
+  },
+  {
+    id: '2',
+    title: "Civil Engineer",
+    company: "HiTech",
+    location: "Abuja, Nigeria",
+    type: "Full-Time",
+    tags: ["Engineering", "Construction"],
+    logo: "/placeholder.svg",
+  },
+  {
+    id: '3',
+    title: "Digital Marketing Specialist",
+    company: "Engausa",
+    location: "Kano, Nigeria",
+    type: "Part-Time",
+    tags: ["Marketing", "Training"],
+    logo: "/placeholder.svg",
+  },
+  {
+    id: '4',
+    title: "Data Analyst",
+    company: "eHealth Africa",
+    location: "Abuja, Nigeria",
+    type: "Full-Time",
+    tags: ["Data Science", "Healthcare"],
+    logo: "/placeholder.svg",
+  },
+  {
+    id: '5',
+    title: "Business Development Manager",
+    company: "BrandDrive",
+    location: "Lagos, Nigeria",
+    type: "Full-Time",
+    tags: ["Business", "E-commerce"],
+    logo: "/placeholder.svg",
+  },
+  {
+    id: '6',
+    title: "Frontend Developer",
+    company: "HNG",
+    location: "Remote",
+    type: "Internship",
+    tags: ["Development", "Tech"],
+    logo: "/placeholder.svg",
+  },
+  {
+    id: '7',
+    title: "Product Manager",
+    company: "MBL Hightech",
+    location: "Lagos, Nigeria",
+    type: "Full-Time",
+    tags: ["Management", "Tech"],
+    logo: "/placeholder.svg",
+  },
+  {
+    id: '8',
+    title: "Startup Consultant",
+    company: "Startup Kano",
+    location: "Kano, Nigeria",
+    type: "Contract",
+    tags: ["Entrepreneurship", "Consulting"],
+    logo: "/placeholder.svg",
+  },
+];
+
+
 export const popularRoles = [
     {
         name: "Software Engineer",
