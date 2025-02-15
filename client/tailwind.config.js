@@ -5,42 +5,46 @@ export default {
   theme: {
   	extend: {
   		fontFamily: {
-  			kayphodo: ['Kay Pho Do', 'monospace'],
-  			montserrat: ['Montserrat', 'sans-serif']
+  			kayphodo: [
+  				'Kay Pho Do',
+  				'monospace'
+  			],
+  			montserrat: [
+  				'Montserrat',
+  				'sans-serif'
+  			]
   		},
   		colors: {
-			purple: {
-				"500": '#4640DE',
-				"400": '#3F3AC8',
-				"300": '#3834B2',
-				"200": '#312E9C',
-				"100": '#2A2886',
-			},
-			blue: {
-				"500": '#26A4FF',
-				"400": '#2294E6',
-				"300": '#1E84CC',
-				"200": '#1A74B3',
-				"100": '#166499',
-			},
-			midnight_blue: {
-				"500": '#25324B',
-				"400": '#22304A',
-				"300": '#202430',
-			},
-			gray: {
-				"500": '#6B7280',
-				"400": '#64707D',
-				"300": '#5D687A',
-				"200": '#566077',
-				"100": '#4F5874',
-			},
-			white: '#FFFFFF',
-			white: {
-				"900": '#F8F8FD',
-				"500": '#FFFFFF',
-			},
-			
+  			purple: {
+  				'500': '#4640DE',
+  				'400': '#3F3AC8',
+  				'300': '#3834B2',
+  				'200': '#312E9C',
+  				'100': '#2A2886'
+  			},
+  			blue: {
+  				'500': '#26A4FF',
+  				'400': '#2294E6',
+  				'300': '#1E84CC',
+  				'200': '#1A74B3',
+  				'100': '#166499'
+  			},
+  			midnight_blue: {
+  				'500': '#25324B',
+  				'400': '#22304A',
+  				'300': '#202430'
+  			},
+  			gray: {
+  				'500': '#6B7280',
+  				'400': '#64707D',
+  				'300': '#5D687A',
+  				'200': '#566077',
+  				'100': '#4F5874'
+  			},
+  			white: {
+  				'900': '#F8F8FD',
+  				'500': '#FFFFFF'
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -96,6 +100,28 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		keyframes: {
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
+  			}
+  		},
+  		animation: {
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
   	}
   },
