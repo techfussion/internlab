@@ -11,11 +11,13 @@ import { CompaniesManagement } from './pages/admin/company/Page';
 import { DomainsManagement } from './pages/admin/domain/Page';
 import SubmissionManagement from './pages/admin/submissions/Page';
 import FindPlacemennt from './pages/company/FindJobs/FindPlacement';
-
+import Description from './pages/company/Description/Companies-description';
+import { JobProvider } from './context/use-context';
 const App: React.FC = () => {
   return (
     <AuthProvider>
       <DataProvider>
+  <JobProvider>
         <Router>
           <Routes>
             {/* Public Routes */}
@@ -23,6 +25,7 @@ const App: React.FC = () => {
              <Route path="/Placements" element={<FindPlacemennt />} />
             <Route path="/companies" element={<BrowseCompany />} />
             <Route path="/companies/profile" element={<Profile />} />
+           <Route path="/:companiesName/description" element={<Description />} />
 
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/companies" element={<CompaniesManagement />} />
@@ -35,6 +38,7 @@ const App: React.FC = () => {
             </Route>
           </Routes>
         </Router>
+        </JobProvider>
       </DataProvider>
     </AuthProvider>
   );

@@ -13,9 +13,12 @@ import {
 } from "@/global/constants";
 import { icons } from "@/global/imageUtil";
 import RecommendationBanner from "@/components/layout/RecommendationBanner";
+// import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 
 const Home: React.FC = () => {
+;
   return (
     <>
       <HeroSection />
@@ -28,33 +31,36 @@ const Home: React.FC = () => {
       
       <RecommendationBanner />
       
-      <section className="px-16 mt-10 pb-10">
-        <SectionHeader title="Popular" highlightedWord="companies" />
-        <div className="flex flex-wrap gap-2 mt-5">
-          {popularCompanies.map((company, index) => (
-            <div
-              key={index}
-              className="flex flex-col my-5 p-4 border w-56 cursor-pointer hover:scale-105 z-[1] transition-transform"
-            >
-              <div className="flex flex-col mb-5 gap-3">
-                <img src={company.img} alt={`${company.name} logo`} className="w-4" />
-                <h4 className="font-medium text-sm text-midnight_blue-500">
-                  {company.name}
-                </h4>
-              </div>
-              <p className="text-xs opacity-50 mb-5">
-                {company.about.slice(0, 100)}...
-              </p>
-              <div className="flex gap-1">
-                <p className="text-[10px] font-extralight text-purple-500">
-                  Click to view full company detail
-                </p>
-                <img src={icons.arrowRightBlue} alt="arrow" className="w-2" />
-              </div>
-            </div>
-          ))}
+     <section className="px-16 mt-10 pb-10">
+  <SectionHeader title="Popular" highlightedWord="companies" />
+
+  <div className="flex flex-wrap gap-2 mt-5">
+    {popularCompanies.map((company, index) => (
+      <Link
+        key={index}
+        to={`/${company.name.replace(/\s+/g, '-').toLowerCase()}/description`}
+        className="flex flex-col my-5 p-4 border w-56 cursor-pointer hover:scale-105 z-[1] transition-transform"
+      >
+        <div className="flex flex-col mb-5 gap-3">
+          <img src={company.img} alt={`${company.name} logo`} className="w-4" />
+          <h4 className="font-medium text-sm text-midnight_blue-500">
+            {company.name}
+          </h4>
         </div>
-      </section>
+        <p className="text-xs opacity-50 mb-5">
+          {company.about.slice(0, 100)}...
+        </p>
+        <div className="flex gap-1">
+          <p className="text-[10px] font-extralight text-purple-500">
+            Click to view full company detail
+          </p>
+          <img src={icons.arrowRightBlue} alt="arrow" className="w-2" />
+        </div>
+      </Link>
+    ))}
+  </div>
+</section>
+
       
       <section className="px-16 mt-10 p-10 bg-white-900 relative">
         <img
