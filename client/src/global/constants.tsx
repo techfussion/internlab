@@ -97,38 +97,45 @@ export const popularCompanies = [
 ];
 
 
-  export const Descriptions= [
-    {
-      name: "Zainpay",
-      founded: 2021,
-      locations: ["Nasarawa", "Abuja", "Lagos"],
-      industry: "Fintech / Payment Processing",
-      company_profile: "Zainpay offers diversified payment acceptance solutions for businesses, including platforms for developers and services such as agency banking, settlements, and APIs. Their infrastructure supports payment processing through various channels like card acceptance, POS terminals, and bank transfers.",
-      contact_information: "support@zainpay.ng",
-      office_locations: "Specific office addresses are not publicly disclosed.",
-     "leadership_team": [
-        { name: "David Adeleke", role: "CEO", picture: "https://example.com/david_adeleke.jpg" },
-       { name: "Frank Uwajeh", role: "CTO", picture: "https://example.com/frank_uwajeh.jpg" }, 
-       { name: "Ini Jones", role: "Developer", picture: "https://example.com/ini_jones.jpg" }, 
-{ name: "David Adetoro", role: "Product Designer", picture: "https://example.com/david_adetoro.jpg" }
-
-      ],
-      office_environment_picture: "https://example.com/zainpay_office.jpg",
-      office_environment: "Specific images of Zainpay's office environment are not publicly available."
-    },
-    {
+ export const Descriptions = [
+  {
+    name: "Zainpay",
+    founded: 2021,
+    locations: ["Nasarawa", "Abuja", "Lagos"],
+    industry: "Fintech / Payment Processing",
+    company_profile: "Zainpay offers diversified payment acceptance solutions for businesses, including platforms for developers and services such as agency banking, settlements, and APIs. Their infrastructure supports payment processing through various channels like card acceptance, POS terminals, and bank transfers.",
+    contact_information: "support@zainpay.ng",
+    office_locations: [
+      "No. 5, Shendam Road, Lafia, Nasarawa State, Nigeria",
+      "10 Shettima A. Munguno Crescent, Utako, Abuja, FCT, Nigeria",
+      "123 Broad Street, Lagos Island, Lagos, Nigeria"
+    ],
+    leadership_team: [
+      { name: "David Adeleke", role: "CEO", picture: "https://example.com/david_adeleke.jpg" },
+      { name: "Frank Uwajeh", role: "CTO", picture: "https://example.com/frank_uwajeh.jpg" },
+      { name: "Ini Jones", role: "Developer", picture: "https://example.com/ini_jones.jpg" },
+      { name: "David Adetoro", role: "Product Designer", picture: "https://example.com/david_adetoro.jpg" }
+    ],
+    office_environment_picture: "https://example.com/zainpay_office.jpg",
+    office_environment: "Specific images of Zainpay's office environment are not publicly available."
+  },
+  {
     name: "HiTech",
     founded: 1988,
     locations: ["Jos", "Edo", "Lagos"],
     industry: "Construction / Civil Engineering",
     company_profile: "HiTech Construction Company Limited is a leading building and civil engineering contractor in Nigeria, known for delivering high-quality infrastructure projects nationwide.",
     contact_information: "Specific contact details are not publicly disclosed.",
-    office_locations: "Specific office addresses are not publicly disclosed.",
-     leadership_team: [
-        { name: "John Smith", role: "Managing Director", picture: "https://example.com/john_smith.jpg" },
-        { name: "Jane Doe", role: "Operations Manager", picture: "https://example.com/jane_doe.jpg" }
-      ],
-      office_environment_picture: "https://example.com/hitech_office.jpg",
+    office_locations: [
+      "Plot 45, Yakubu Gowon Way, Jos, Plateau State, Nigeria",
+      "456 Ikpoba Hill, Benin City, Edo State, Nigeria",
+      "789 Agege Motor Road, Mushin, Lagos, Nigeria"
+    ],
+    leadership_team: [
+      { name: "John Smith", role: "Managing Director", picture: "https://example.com/john_smith.jpg" },
+      { name: "Jane Doe", role: "Operations Manager", picture: "https://example.com/jane_doe.jpg" }
+    ],
+    office_environment_picture: "https://example.com/hitech_office.jpg",
     office_environment: "Specific images of HiTech's office environment are not publicly available."
   },
   {
@@ -138,7 +145,11 @@ export const popularCompanies = [
     industry: "Education / Skill Acquisition",
     company_profile: "Engausa Hub aims to train youth, especially the less privileged, in various skills, empowering them for better opportunities.",
     contact_information: "Specific contact details are not publicly disclosed.",
-    office_locations: "Specific office addresses are not publicly disclosed.",
+    office_locations: [
+      "12B, Bompai Road, Kano, Kano State, Nigeria",
+      "15 Gimbiya Street, Area 11, Garki, Abuja, FCT, Nigeria",
+      "22A, Ali Akilu Road, Kaduna, Kaduna State, Nigeria"
+    ],
     leadership_team: "Specific details about Engausa's leadership team are not publicly disclosed.",
     office_environment: "Specific images of Engausa's office environment are not publicly available."
   },
@@ -151,7 +162,10 @@ export const popularCompanies = [
     contact_information: "info@ehealthafrica.org",
     office_locations: [
       "4-6 Independence Road, Kano, Nigeria",
-      "28 Osun Crescent, Maitama, Abuja, Nigeria"
+      "28 Osun Crescent, Maitama, Abuja, Nigeria",
+      "10 Sultan Road, Kaduna, Nigeria",
+      "5 Wetheral Road, Owerri, Imo State, Nigeria",
+      "8 Maiduguri Road, Dutse, Jigawa State, Nigeria"
     ],
     leadership_team: [
       { name: "James Okafor", role: "CEO", picture: "https://example.com/james_okafor.jpg" },
@@ -167,7 +181,12 @@ export const popularCompanies = [
     industry: "Business Management / E-commerce",
     company_profile: "brandDrive provides tools for businesses to manage their operations both online and in-store, offering solutions like accounting, payments, point of sale, e-commerce, and analytics.",
     contact_information: "Specific contact details are not publicly disclosed.",
-    office_locations: "Specific office addresses are not publicly disclosed.",
+    office_locations: [
+      "14A, Murtala Mohammed Way, Kano, Nigeria",
+      "20 Mississippi Street, Maitama, Abuja, Nigeria",
+      "18 Isa Kaita Road, Kaduna, Nigeria",
+      "25 Aba Road, Port Harcourt, Rivers State, Nigeria"
+    ],
     leadership_team: "Specific details about brandDrive's leadership team are not publicly disclosed.",
     office_environment: "Specific images of brandDrive's office environment are not publicly available."
   },
@@ -178,44 +197,20 @@ export const popularCompanies = [
     industry: "Technology / Education",
     company_profile: "HNG is dedicated to enhancing the skills of tech enthusiasts through its internship programs, collaborating with top tech talents to foster growth and development.",
     contact_information: "Specific contact details are not publicly disclosed.",
-    office_locations: "Specific office addresses are not publicly disclosed.",
+    office_locations: [
+      "16B, Zaria Road, Kano, Nigeria",
+      "12 Nile Street, Maitama, Abuja, Nigeria",
+      "24 Muhammadu Buhari Way, Kaduna, Nigeria",
+      "30 Ring Road, Ibadan, Oyo State, Nigeria",
+      "8 Tafawa Balewa Street, Jos, Plateau State, Nigeria"
+    ],
     leadership_team: [
       { name: "Mark Adeyemi", role: "Founder", picture: "https://example.com/mark_adeyemi.jpg" },
       { name: "Sophia Nwachukwu", role: "Lead Trainer", picture: "https://example.com/sophia_nwachukwu.jpg" }
     ],
-    office_environment_picture: "https://example.com/hng_office.jpg",
-    office_environment: "Specific images of HNG's office environment are not publicly available."
-  },
-  {
-    name: "MBL Hightech",
-    founded: "Specific founding year not publicly disclosed.",
-    locations: ["Kano", "Abuja", "Kaduna", "Delta", "Edo"],
-    industry: "Outsourcing / Technology Services",
-    company_profile: "MBL Hightech offers outsourced services to startups with strong ideas, providing them with specialized workforces to bring their concepts to fruition.",
-    contact_information: "Specific contact details are not publicly disclosed.",
-    office_locations: "Specific office addresses are not publicly disclosed.",
-    leadership_team: [
-      { name: "Ahmed Musa", role: "CEO" },
-      { name: "Fatima Bello", role: "COO" }
-    ],
-    office_environment: "Specific images of MBL Hightech's office environment are not publicly available."
-  },
-  {
-    name: "Startup Kano",
-    founded: "Specific founding year not publicly disclosed.",
-    locations: ["Kano", "Abuja", "Kaduna"],
-    industry: "Entrepreneurship / Business Development",
-    company_profile: "Startup Kano provides a platform for creative entrepreneurs to grow their ideas, scale their businesses, access funding, and build meaningful networks.",
-    contact_information: "Specific contact details are not publicly disclosed.",
-    office_locations: "Specific office addresses are not publicly disclosed.",
-    leadership_team: [
-      { name: "Aliyu Mohammed", role: "Founder" },
-      { name: "Hauwa Usman", role: "Community Manager" }
-    ],
-    office_environment: "Specific images of Startup Kano's office environment are not publicly available."
-  }
-  ]
-
+    office_environment_picture: "https://example.com::contentReference[oaicite:0]{index=0}"
+}
+ ]
 
 export const popularCompaniesJobs = [
   {

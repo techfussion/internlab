@@ -15,6 +15,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import Filters from "@/pages/helpers/Filters"
 
 const PopularSearchTerms: React.FC = () => (
     <p className="text-xs text-textBlack1 mt-4 opacity-70">
@@ -48,6 +49,12 @@ const BrowseCompany: React.FC = () => {
                     </div>
                 </div>
             </section>
+
+            <section className="flex justify-center self-center px-16 py-10 ">
+
+                <aside className="pt-[3rem]">
+                <Filters/>
+                </aside>
             <section className="px-16 py-10">
                 <h2 className="text-xl text-midnight_blue-500 font-bold mb-1">Recommended Companies</h2>
                 <p className="text-[10px] text-gray-500">Peoples popular choices</p>
@@ -67,7 +74,7 @@ const BrowseCompany: React.FC = () => {
                             {company.about.slice(0, 100)}...
                         </p>
                         <div className="flex gap-1">
-                            <Link to="/companies/profile" className="text-[10px] font-extralight text-purple-500">
+                            <Link   to={`/${company.name.replace(/\s+/g, '-').toLowerCase()}/profile`} className="text-[10px] font-extralight text-purple-500">
                             Click to view full company detail
                             </Link>
                             {/* <img src={icons.arrowRightBlue} alt="arrow" className="w-2" /> */}
@@ -91,6 +98,7 @@ const BrowseCompany: React.FC = () => {
                         </PaginationItem>
                     </PaginationContent>
                 </Pagination>
+            </section>
             </section>
             <RecommendationBanner />
             <Footer />
