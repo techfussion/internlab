@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Building2, Calendar, Mail, MapPin, Bookmark, Users, Building } from "lucide-react"
 import Footer from "@/components/layout/Footer"
-
+import Nav from "@/components/layout/Nav"
 function Description() {
   const { companiesName } = useParams()
   const { setSelectedCompanies } = useCompaniesDescription()
@@ -32,6 +32,9 @@ function Description() {
   }
 
   return (
+
+    <>
+    <header><Nav/></header>
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <Card className="border-0 shadow-sm">
         <CardHeader className="space-y-4 pb-6">
@@ -166,6 +169,7 @@ function Description() {
 
       <Footer />
     </div>
+    </>
   )
 }
 

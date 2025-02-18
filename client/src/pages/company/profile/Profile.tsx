@@ -13,9 +13,32 @@ import { Link } from "react-router-dom";
 import { Facebook, Factory, Flame, Instagram, Linkedin, MapPin, Slash, Twitter, UsersRound} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import pattern from "@/assets/Pattern.png";  
+import { useEffect } from "react"
+import { useParams } from "react-router-dom"
 import { categoryColorCode, popularRoles } from "@/global/constants";
+import { useCompaniesDescription } from "@/context/use-context"
+import { Descriptions } from "@/global/constants"
   
 const Profile: React.FC = () => {
+    const { companiesName } = useParams()
+  const { setSelectedCompanies } = useCompaniesDescription()
+//   const [isBookmarked, setIsBookmarked] = useState(false)
+
+  const CompaniesDescriptions = Descriptions.find(
+    (company: any) => company.name.replace(/\s+/g, "-").toLowerCase() === companiesName,
+  )
+
+  useEffect(() => {
+    if (CompaniesDescriptions) {
+      setSelectedCompanies(CompaniesDescriptions)
+      localStorage.setItem("selectedCompanies", JSON.stringify(CompaniesDescriptions))
+    }
+  }, [CompaniesDescriptions, setSelectedCompanies])
+
+  if (!CompaniesDescriptions) {
+    return <p className="text-center text-red-500">Companies Description not found!</p>
+  }
+
     return (
         <>
             <section className="bg-white-900 pb-10">
@@ -40,7 +63,7 @@ const Profile: React.FC = () => {
                                 <Slash />
                             </BreadcrumbSeparator>
                             <BreadcrumbItem>
-                                <BreadcrumbPage className="text-xs">Novalglam</BreadcrumbPage>
+                                <BreadcrumbPage className="text-xs">{CompaniesDescriptions.name}</BreadcrumbPage>
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
@@ -48,7 +71,7 @@ const Profile: React.FC = () => {
                         <img src="https://picsum.photos/200" alt="Company logo" className="w-32 h-32" />
                         <div className="flex flex-col gap-y-2">
                             <div className="flex items-center gap-4">
-                                <h1 className="text-3xl font-semibold text-midnight_blue-500">Novalglam</h1>
+                                <h1 className="text-3xl font-semibold text-midnight_blue-500">{CompaniesDescriptions.name}</h1>
                                 <p className="text-[10px] border border-purple-500 text-purple-500 py-1 px-2">43 Deps</p>
                             </div>
                             <Link to="" className="text-purple-500 text-xs">
@@ -61,7 +84,7 @@ const Profile: React.FC = () => {
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-500">Founded</p>
-                                        <p className="text-midnight_blue-500 font-semibold">Jul 31, 2019</p>
+                                        <p className="text-midnight_blue-500 font-semibold">{CompaniesDescriptions.founded}</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-3 items-center text-[10px]">
@@ -79,7 +102,7 @@ const Profile: React.FC = () => {
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-500">Location</p>
-                                        <p className="text-midnight_blue-500 font-semibold">San Francisco, CA</p>
+                                        <p className="text-midnight_blue-500 font-semibold">{CompaniesDescriptions.locations.join(' ,')}</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-3 items-center text-[10px]">
@@ -88,7 +111,7 @@ const Profile: React.FC = () => {
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-500">Industry</p>
-                                        <p className="text-midnight_blue-500 font-semibold">Technology</p>
+                                        <p className="text-midnight_blue-500 font-semibold">{CompaniesDescriptions.industry}</p>
                                     </div>
                                 </div>
                             </div>
@@ -101,15 +124,13 @@ const Profile: React.FC = () => {
                     <div className="mb-6">
                         <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Company Profile</h2>
                         <p className="text-xs text-gray-500">
-                        Novalglam is a software platform for starting and running internet businesses. Millions of businesses rely on Novalglam software tools to accept payments, expand globally, and manage their businesses online. Novalglam has been at the forefront of expanding internet commerce, powering new business models, and supporting the latest platforms, from marketplaces to mobile commerce sites. We believe that growing the GDP of the internet is a problem rooted in code and design, not finance. Novalglam is built for developers, makers, and creators. We work on solving the hard technical problems necessary to build global economic infrastructure—from designing highly reliable systems to developing advanced machine learning algorithms to prevent fraud.
+                       {CompaniesDescriptions.company_profile}
                         </p>
                     </div>
                     <div className="mb-6">
                         <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Contact</h2>
                         <div className="flex flex-col gap-2">
-                            <p className="text-[10px] w-max border border-purple-500 text-purple-500 py-1 px-2 flex gap-1 items-center"><Twitter fill="#4640DE" size={12} className="text-purple-500"/> x.com/novalglam</p>
-                            <p className="text-[10px] w-max border border-purple-500 text-purple-500 py-1 px-2 flex gap-1 items-center"><Facebook fill="#4640DE" size={12} className="text-purple-500"/>facebook.com/novalglamHQ</p>
-                            <p className="text-[10px] w-max border border-purple-500 text-purple-500 py-1 px-2 flex gap-1 items-center"><Linkedin fill="#4640DE" size={12} className="text-purple-500"/>linkedin.com/in/novalglam</p>
+                            <p className="text-[10px] w-max border border-purple-500 text-purple-500 py-1 px-2 flex gap-1 items-center"><Twitter fill="#4640DE" size={12} className="text-purple-500"/> {CompaniesDescriptions.contact_information}</p>
                         </div>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-5">
@@ -141,87 +162,47 @@ const Profile: React.FC = () => {
                             <p className="border text-gray-500 text-xs py-1 px-4">SCRUM</p>
                         </div>
                     </div>
-                    <div className="mt-6">
-                        <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Office Location</h2>
-                        <p className="text-xs text-gray-500">
-                        Discover the office locations to find the best fit for you. 
-                        </p>
-                        <div className="flex flex-wrap gap-2 mt-5">
-                            <div className="flex flex-col gap-2">
-                                <h3 className="text-xs text-blue-500 font-semibold">San Francisco, CA</h3>
-                                <p className="text-xs text-gray-500">123 Mission St, San Francisco, CA 94105</p>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <h3 className="text-xs text-blue-500 font-semibold">New York, NY</h3>
-                                <p className="text-xs text-gray-500">123 Mission St, San Francisco, CA 94105</p>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <h3 className="text-xs text-blue-500 font-semibold">London, UK</h3>
-                                <p className="text-xs text-gray-500">123 Mission St, San Francisco, CA 94105</p>
-                            </div>
-                        </div>
-                    </div>
+                   <div className="mt-6">
+  <p className="text-xs text-gray-500">
+    Discover the office locations to find the best fit for you.
+  </p>
+  <div className="flex flex-wrap gap-2 mt-5">
+    {Array.isArray(CompaniesDescriptions.office_locations) &&
+    CompaniesDescriptions.office_locations.length > 0 ? (
+      CompaniesDescriptions.office_locations.map((office, index) => (
+        <div key={index} className="flex flex-col gap-2">
+          <p className="text-xs text-gray-500">{office}</p>
+        </div>
+      ))
+    ) : (
+      <p className="text-gray-500">Office locations not available.</p>
+    )}
+  </div>
+</div>
+
                 </div>
             </section>
-            <section className="px-16 py-10">
-                <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Team</h2>
-                <div className="flex flex-wrap gap-4 mt-5">
-                    <Card className="rounded-none w-44 h-44 shadow-none flex flex-col items-center">
-                        <img src="https://picsum.photos/200" alt="Team member" className="w-14 h-14 mt-4 rounded-full" />
-                        <h3 className="text-sm text-midnight_blue-500 font-medium mt-3">Célestin Gardinier</h3>
-                        <p className="text-xs text-gray-500 mt-1">CEO & Co-Founder</p>
-                        <div className="flex gap-2 mt-4">
-                            <Instagram size={12} className="text-gray-500"/>
-                            <Linkedin size={12} className="text-gray-500"/>
-                        </div>
-                    </Card>
-                    <Card className="rounded-none w-44 h-44 shadow-none flex flex-col items-center">
-                        <img src="https://picsum.photos/200" alt="Team member" className="w-14 h-14 mt-4 rounded-full" />
-                        <h3 className="text-sm text-midnight_blue-500 font-medium mt-3"> Reynaud Colbert</h3>
-                        <p className="text-xs text-gray-500 mt-1">Co-Founder</p>
-                        <div className="flex gap-2 mt-4">
-                            <Instagram size={12} className="text-gray-500"/>
-                            <Linkedin size={12} className="text-gray-500"/>
-                        </div>
-                    </Card>
-                    <Card className="rounded-none w-44 h-44 shadow-none flex flex-col items-center">
-                        <img src="https://picsum.photos/200" alt="Team member" className="w-14 h-14 mt-4 rounded-full" />
-                        <h3 className="text-sm text-midnight_blue-500 font-medium mt-3">Arienne Lyon</h3>
-                        <p className="text-xs text-gray-500 mt-1">Managing Director</p>
-                        <div className="flex gap-2 mt-4">
-                            <Instagram size={12} className="text-gray-500"/>
-                            <Linkedin size={12} className="text-gray-500"/>
-                        </div>
-                    </Card>
-                    <Card className="rounded-none w-44 h-44 shadow-none flex flex-col items-center">
-                        <img src="https://picsum.photos/200" alt="Team member" className="w-14 h-14 mt-4 rounded-full" />
-                        <h3 className="text-sm text-midnight_blue-500 font-medium mt-3">Bernard Alexander</h3>
-                        <p className="text-xs text-gray-500 mt-1">Managing Director</p>
-                        <div className="flex gap-2 mt-4">
-                            <Instagram size={12} className="text-gray-500"/>
-                            <Linkedin size={12} className="text-gray-500"/>
-                        </div>
-                    </Card>
-                    <Card className="rounded-none w-44 h-44 shadow-none flex flex-col items-center">
-                        <img src="https://picsum.photos/200" alt="Team member" className="w-14 h-14 mt-4 rounded-full" />
-                        <h3 className="text-sm text-midnight_blue-500 font-medium mt-3">Christine Jhonson</h3>
-                        <p className="text-xs text-gray-500 mt-1">Managing Director</p>
-                        <div className="flex gap-2 mt-4">
-                            <Instagram size={12} className="text-gray-500"/>
-                            <Linkedin size={12} className="text-gray-500"/>
-                        </div>
-                    </Card>
-                    <Card className="rounded-none w-44 h-44 shadow-none flex flex-col items-center">
-                        <img src="https://picsum.photos/200" alt="Team member" className="w-14 h-14 mt-4 rounded-full" />
-                        <h3 className="text-sm text-midnight_blue-500 font-medium mt-3">Christine Jhonson</h3>
-                        <p className="text-xs text-gray-500 mt-1">Managing Director</p>
-                        <div className="flex gap-2 mt-4">
-                            <Instagram size={12} className="text-gray-500"/>
-                            <Linkedin size={12} className="text-gray-500"/>
-                        </div>
-                    </Card>
-                </div>
-            </section>
+<section className="px-16 py-10">
+  <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Team</h2>
+  <div className="flex flex-wrap gap-4 mt-5">
+    {Array.isArray(CompaniesDescriptions.leadership_team) && CompaniesDescriptions.leadership_team.length > 0 ? (
+      CompaniesDescriptions.leadership_team.map((member, index) => (
+        <Card key={index} className="rounded-none w-44 h-44 shadow-none flex flex-col items-center">
+          <img src={member.picture} alt={member.name} className="w-14 h-14 mt-4 rounded-full" />
+          <h3 className="text-sm text-midnight_blue-500 font-medium mt-3">{member.name}</h3>
+          <p className="text-xs text-gray-500 mt-1">{member.role}</p>
+          <div className="flex gap-2 mt-4">
+            { <Instagram size={12} className="text-gray-500" />}
+            {  <Linkedin size={12} className="text-gray-500" />}
+          </div>
+        </Card>
+      ))
+    ) : (
+      <p className="text-gray-500">Leadership team information not available.</p>
+    )}
+  </div>
+</section>
+
             <section className="px-16 py-10">
                 <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Perks & Benefits</h2>
                 <p className="text-xs text-gray-500">
