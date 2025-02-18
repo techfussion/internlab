@@ -31,9 +31,6 @@ export class RegisterDto {
   @IsOptional()
   @IsString()
   level: string;
-
-  @IsEnum(Role, { message: 'Role must be USER or ADMIN' })
-  role: Role;
 }
 
 

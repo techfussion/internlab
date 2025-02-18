@@ -15,6 +15,7 @@ model User {
   institution   String?
   department    String?
   level         String?
+  regNo         String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   role          Role          @default(USER)

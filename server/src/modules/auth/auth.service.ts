@@ -56,9 +56,8 @@ export class AuthService extends BaseService {
           fullName,
           email, 
           password, 
-          role, 
-          department, 
-          level, 
+          department,
+          level,
           institution,
         } = registerDto;
         
@@ -82,7 +81,6 @@ export class AuthService extends BaseService {
               data: {
                 fullName,
                 email, 
-                role, 
                 department, 
                 level, 
                 institution,
