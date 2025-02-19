@@ -10,7 +10,7 @@ import AdminDashboard from './pages/admin/Page';
 import { CompaniesManagement } from './pages/admin/company/Page';
 import { DomainsManagement } from './pages/admin/domain/Page';
 import SubmissionManagement from './pages/admin/submissions/Page';
-import FindPlacemennt from './pages/company/FindJobs/FindPlacement';
+import FindPlacemennt from './pages/domain/find-placement/FindPlacement';
 // import Description from './pages/company/Description/Companies-description';
 import { JobProvider } from './context/use-context';
 const App: React.FC = () => {

@@ -14,9 +14,11 @@ import { useToast } from "@/hooks/use-toast";
 const formSchema = z
   .object({
     email: z.string().email({ message: "Invalid email format" }),
-    firstName: z.string().min(3, { message: "Firstname must be at least 3 characters" }),
-    middleName: z.string().optional(),
-    lastName: z.string().min(3, { message: "Lastname must be at least 3 characters" }),
+    fullName: z.string().min(7, { message: "Full name cannot be less than 3 characters" }),
+    institution: z.string().optional(),
+    level: z.string().optional(),
+    department: z.string().optional(),
+    regNo: z.string().optional(),
     password: z.string().min(6, { message: "Password must be at least 6 characters" }),
   })
 
@@ -65,45 +67,75 @@ const Signup: React.FC = () => {
         <div className="max-h-72 overflow-y-auto px-1">
             <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-                {/* Firstname Field */}
+                {/* FullName Field */}
                 <FormField
                 control={form.control}
-                name="firstName"
+                name="fullName"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>Full Name</FormLabel>
                     <FormControl>
-                        <Input className="rounded-none" placeholder="Enter your firstname" {...field} />
+                        <Input className="rounded-none" placeholder="Enter your fullname" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
                 )}
                 />
 
-                {/* Middlename Field */}
+                {/* Institution Field */}
                 <FormField
                 control={form.control}
-                name="middleName"
+                name="institution"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Middle Name</FormLabel>
+                    <FormLabel>Institution (Optional)</FormLabel>
                     <FormControl>
-                        <Input className="rounded-none" placeholder="Enter your middlename" {...field} />
+                        <Input className="rounded-none" placeholder="Enter your institution" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
                 )}
                 />
 
-                {/* Lastname Field */}
+                {/* Department Field */}
                 <FormField
                 control={form.control}
-                name="lastName"
+                name="department"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>Departement (Optional)</FormLabel>
                     <FormControl>
-                        <Input className="rounded-none" placeholder="Enter your lastname" {...field} />
+                        <Input className="rounded-none" placeholder="Enter your department" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+
+                {/* Department Field */}
+                <FormField
+                control={form.control}
+                name="level"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Level (Optional)</FormLabel>
+                    <FormControl>
+                        <Input className="rounded-none" placeholder="Enter your level" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+
+                {/* Department Field */}
+                <FormField
+                control={form.control}
+                name="regNo"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>RegistrationNumber (Optional)</FormLabel>
+                    <FormControl>
+                        <Input className="rounded-none" placeholder="Enter your regNumber" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
