@@ -17,7 +17,6 @@ import { popularCompaniesJobs } from "@/global/constants"
 import Footer from "@/components/layout/Footer"
 import Filters from "@/pages/helpers/Filters"
 import { Button } from "@/components/ui/button"
- import  {CompanyModal}  from "@/pages/domain/find-placement/CompanyModal"
 
 type Jobs = {
   id: string;
@@ -116,8 +115,6 @@ function FindPlacement() {
       </section>
 
       <Footer />
-
-    <CompanyModal isOpen={!!selectedCompany} onClose={() => setSelectedCompany(null)} company={selectedCompany} />
     </>
   )
 }

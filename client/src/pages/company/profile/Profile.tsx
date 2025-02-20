@@ -74,9 +74,7 @@ const Profile: React.FC = () => {
                                 <h1 className="text-3xl font-semibold text-midnight_blue-500">{CompaniesDescriptions.name}</h1>
                                 <p className="text-[10px] border border-purple-500 text-purple-500 py-1 px-2">43 Deps</p>
                             </div>
-                            <Link to="" className="text-purple-500 text-xs">
-                                https://novalglam.com
-                            </Link>
+                          
                             <div className="flex gap-6 mt-6">
                                 <div className="flex gap-3 items-center text-[10px]">
                                     <div className="p-2 bg-white-500 rounded-full">
