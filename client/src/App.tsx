@@ -6,13 +6,14 @@ import { AuthProvider } from '@/context/authContext';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { DataProvider } from '@/context/DataContext';
 import Profile from '@/pages/company/profile/Profile';
+import ProfileDomain from '@/pages/domain/profile/Profile';
 import AdminDashboard from './pages/admin/Page';
 import { CompaniesManagement } from './pages/admin/company/Page';
 import { DomainsManagement } from './pages/admin/domain/Page';
 import SubmissionManagement from './pages/admin/submissions/Page';
-import FindPlacemennt from './pages/domain/find-placement/FindPlacement';
+import FindPlacemennt from './pages/domain/FindPlacement';
 import { JobProvider } from './context/use-context';
-import ProfileForm from './pages/user/profile/page';
+import ProfileForm from './pages/user/profile/Page';
 import BookmarksPage from './pages/user/bookmarks/Page';
 import ReviewsPage from './pages/user/reviews/Page';
 import SubmissionsPage from './pages/user/submissions/Page';
@@ -26,9 +27,10 @@ const App: React.FC = () => {
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Home />} />
-              <Route path="/Placements" element={<FindPlacemennt />} />
+              <Route path="/placements" element={<FindPlacemennt />} />
+              <Route path="/placements/:domainName" element={<ProfileDomain />} />
               <Route path="/companies" element={<BrowseCompany />} />
-              <Route path="/:companiesName/profile" element={<Profile />} />
+              <Route path="/companies/:companiesName" element={<Profile />} />
             {/* <Route path="/:companiesName/description" element={<Description />} /> */}
 
               <Route path="/admin" element={<AdminDashboard />} />

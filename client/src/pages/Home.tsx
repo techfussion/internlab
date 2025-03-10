@@ -25,41 +25,41 @@ const Home: React.FC = () => {
       <CompanyLogos />
       
       <section className="px-16 mt-10 pb-10">
-        <SectionHeader title="Explore by" highlightedWord="category" />
+        <SectionHeader title="Explore by" highlightedWord="Industry Type" />
         <CategoryGrid categories={category} />
       </section>
       
       <RecommendationBanner />
       
-     <section className="px-16 mt-10 pb-10">
-  <SectionHeader title="Popular" highlightedWord="companies" />
+      <section className="px-16 mt-10 pb-10">
+        <SectionHeader title="Popular" highlightedWord="companies" route="/companies"/>
 
-  <div className="flex flex-wrap gap-2 mt-5">
-    {popularCompanies.map((company, index) => (
-      <Link
-        key={index}
-        to={`/${company.name.replace(/\s+/g, '-').toLowerCase()}/description`}
-        className="flex flex-col my-5 p-4 border w-56 cursor-pointer hover:scale-105 z-[1] transition-transform"
-      >
-        <div className="flex flex-col mb-5 gap-3">
-          <img src={company.img} alt={`${company.name} logo`} className="w-4" />
-          <h4 className="font-medium text-sm text-midnight_blue-500">
-            {company.name}
-          </h4>
+        <div className="flex flex-wrap gap-2 mt-5">
+          {popularCompanies.map((company, index) => (
+            <Link
+              key={index}
+              to={`/${company.name.replace(/\s+/g, '-').toLowerCase()}/description`}
+              className="flex flex-col my-5 p-4 border w-56 cursor-pointer hover:scale-105 z-[1] transition-transform"
+            >
+              <div className="flex flex-col mb-5 gap-3">
+                <img src={company.img} alt={`${company.name} logo`} className="w-4" />
+                <h4 className="font-medium text-sm text-midnight_blue-500">
+                  {company.name}
+                </h4>
+              </div>
+              <p className="text-xs opacity-50 mb-5">
+                {company.about.slice(0, 100)}...
+              </p>
+              <div className="flex gap-1">
+                <p className="text-[10px] font-extralight text-purple-500">
+                  Click to view full company detail
+                </p>
+                <img src={icons.arrowRightBlue} alt="arrow" className="w-2" />
+              </div>
+            </Link>
+          ))}
         </div>
-        <p className="text-xs opacity-50 mb-5">
-          {company.about.slice(0, 100)}...
-        </p>
-        <div className="flex gap-1">
-          <p className="text-[10px] font-extralight text-purple-500">
-            Click to view full company detail
-          </p>
-          <img src={icons.arrowRightBlue} alt="arrow" className="w-2" />
-        </div>
-      </Link>
-    ))}
-  </div>
-</section>
+      </section>
 
       
       <section className="px-16 mt-10 p-10 bg-white-900 relative">
@@ -68,7 +68,7 @@ const Home: React.FC = () => {
           alt="decorative pattern"
           className="absolute top-0 right-0 w-2/4 h-full"
         />
-        <SectionHeader title="Popular" highlightedWord="roles" />
+        <SectionHeader title="Popular" highlightedWord="roles" route="/placements"/>
         <div className="flex flex-wrap gap-2 mt-5">
           {popularRoles.map((role, index) => (
             <div

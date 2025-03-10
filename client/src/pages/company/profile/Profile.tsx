@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Footer from "@/components/layout/Footer";
 import Nav from "@/components/layout/Nav";
 import {
@@ -9,35 +9,48 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
   } from "@/components/ui/breadcrumb"
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Facebook, Factory, Flame, Instagram, Linkedin, MapPin, Slash, Twitter, UsersRound} from "lucide-react";
+import { Bookmark, Facebook, Factory, Flame, Instagram, Linkedin, MapPin, Phone, Slash, Star, Twitter, UsersRound} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import pattern from "@/assets/Pattern.png";  
 import { useEffect } from "react"
-import { useParams } from "react-router-dom"
-import { categoryColorCode, popularRoles } from "@/global/constants";
-import { useCompaniesDescription } from "@/context/use-context"
-import { Descriptions } from "@/global/constants"
+import { categoryColorCode } from "@/global/constants";
+import apiClient from "@/interceptor/axios.interceptor";
+import { icons } from "@/global/imageUtil";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
   
 const Profile: React.FC = () => {
-    const { companiesName } = useParams()
-  const { setSelectedCompanies } = useCompaniesDescription()
-//   const [isBookmarked, setIsBookmarked] = useState(false)
+    const [ loading, setLoading ] = useState<boolean>(false);
+    const [ companyDetails, setCompanyDetails ] = useState<any>({});
+    const pathname = useParams();
+    //   const [isBookmarked, setIsBookmarked] = useState(false)
 
-  const CompaniesDescriptions = Descriptions.find(
-    (company: any) => company.name.replace(/\s+/g, "-").toLowerCase() === companiesName,
-  )
+    const fetchCompanyDetails= async () => {
+        try {
+          setLoading(true);
+          const response = await apiClient.get(`/companies/${pathname.companiesName}`);
+          
+          const data = response.data;
+        
+          setCompanyDetails(data);
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-  useEffect(() => {
-    if (CompaniesDescriptions) {
-      setSelectedCompanies(CompaniesDescriptions)
-      localStorage.setItem("selectedCompanies", JSON.stringify(CompaniesDescriptions))
+    useEffect(() => {
+        fetchCompanyDetails()
+    }, [])
+
+    console.log(companyDetails);
+
+    if (!companyDetails) {
+        return <p className="text-center text-red-500">Companies Description not found!</p>
     }
-  }, [CompaniesDescriptions, setSelectedCompanies])
-
-  if (!CompaniesDescriptions) {
-    return <p className="text-center text-red-500">Companies Description not found!</p>
-  }
 
     return (
         <>
@@ -63,16 +76,24 @@ const Profile: React.FC = () => {
                                 <Slash />
                             </BreadcrumbSeparator>
                             <BreadcrumbItem>
-                                <BreadcrumbPage className="text-xs">{CompaniesDescriptions.name}</BreadcrumbPage>
+                                <BreadcrumbPage className="text-xs">{companyDetails.name}</BreadcrumbPage>
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
                     <div className="flex gap-6 my-6">
-                        <img src="https://picsum.photos/200" alt="Company logo" className="w-32 h-32" />
+                        <img src={companyDetails.logo|| "https://picsum.photos/200"} alt="Company logo" className="w-32 h-32" />
                         <div className="flex flex-col gap-y-2">
-                            <div className="flex items-center gap-4">
-                                <h1 className="text-3xl font-semibold text-midnight_blue-500">{CompaniesDescriptions.name}</h1>
-                                <p className="text-[10px] border border-purple-500 text-purple-500 py-1 px-2">43 Deps</p>
+                            <div className="flex justify-between">
+                                <div className="flex items-center gap-4">
+                                    <h1 className="text-3xl font-semibold text-midnight_blue-500">{companyDetails.name}</h1>
+                                    <p className="text-[10px] border border-purple-500 text-purple-500 py-1 px-2">{companyDetails?.domains?.length || 0} deps</p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <p className="text-xs">Rating: {companyDetails?.avgRating}</p>
+                                    <Button size='icon' variant='outline'>
+                                        <Bookmark size={16}/>
+                                    </Button>
+                                </div>
                             </div>
                           
                             <div className="flex gap-6 mt-6">
@@ -82,7 +103,7 @@ const Profile: React.FC = () => {
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-500">Founded</p>
-                                        <p className="text-midnight_blue-500 font-semibold">{CompaniesDescriptions.founded}</p>
+                                        <p className="text-midnight_blue-500 font-semibold">{companyDetails.established}</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-3 items-center text-[10px]">
@@ -91,7 +112,7 @@ const Profile: React.FC = () => {
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-500">Employees</p>
-                                        <p className="text-midnight_blue-500 font-semibold">20+</p>
+                                        <p className="text-midnight_blue-500 font-semibold">{companyDetails.companySize}</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-3 items-center text-[10px]">
@@ -100,7 +121,7 @@ const Profile: React.FC = () => {
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-500">Location</p>
-                                        <p className="text-midnight_blue-500 font-semibold">{CompaniesDescriptions.locations.join(' ,')}</p>
+                                        <p className="text-midnight_blue-500 font-semibold">{companyDetails.address}</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-3 items-center text-[10px]">
@@ -109,7 +130,7 @@ const Profile: React.FC = () => {
                                     </div>
                                     <div className="flex flex-col">
                                         <p className="text-gray-500">Industry</p>
-                                        <p className="text-midnight_blue-500 font-semibold">{CompaniesDescriptions.industry}</p>
+                                        <p className="text-midnight_blue-500 font-semibold">{companyDetails?.industryType?.join(', ')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -122,13 +143,24 @@ const Profile: React.FC = () => {
                     <div className="mb-6">
                         <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Company Profile</h2>
                         <p className="text-xs text-gray-500">
-                       {CompaniesDescriptions.company_profile}
+                            {companyDetails.description}
                         </p>
                     </div>
                     <div className="mb-6">
                         <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Contact</h2>
                         <div className="flex flex-col gap-2">
-                            <p className="text-[10px] w-max border border-purple-500 text-purple-500 py-1 px-2 flex gap-1 items-center"><Twitter fill="#4640DE" size={12} className="text-purple-500"/> {CompaniesDescriptions.contact_information}</p>
+                            <p className="text-xs w-max text-purple-500 py-1"><span className="font-semibold text-gray-500">Email:</span> {companyDetails?.email}</p>
+                            <p className="text-xs w-max text-purple-500 py-1"><span className="font-semibold text-gray-500">Phone:</span> {companyDetails?.phone}</p>
+                            <p className="text-xs w-max text-purple-500 py-1"><span className="font-semibold text-gray-500">Website:</span> <a target="_blank" href={companyDetails?.website}>{companyDetails?.website}</a></p>
+                        </div>
+                    </div>
+                    <div className="mb-6">
+                        <h2 className="text-xl text-midnight_blue-500 font-bold mb-2 mt-4">Socials</h2>
+                        <div className="flex flex-col gap-2">
+                            <p className="text-[10px] w-max border border-purple-500 text-purple-500 py-1 px-2 flex gap-1 items-center"><Facebook fill="#4640DE" size={12} className="text-purple-500"/><a target="_blank" href={companyDetails?.website}>{companyDetails?.facebook}</a></p>
+                            <p className="text-[10px] w-max border border-purple-500 text-purple-500 py-1 px-2 flex gap-1 items-center"><Twitter fill="#4640DE" size={12} className="text-purple-500"/><a target="_blank" href={companyDetails?.website}>{companyDetails?.x}</a></p>
+                            <p className="text-[10px] w-max border border-purple-500 text-purple-500 py-1 px-2 flex gap-1 items-center"><Instagram fill="#4640DE" size={12} className="text-purple-500"/><a target="_blank" href={companyDetails?.website}>{companyDetails?.instagram}</a></p>
+                            <p className="text-[10px] w-max border border-purple-500 text-purple-500 py-1 px-2 flex gap-1 items-center"><Linkedin fill="#4640DE" size={12} className="text-purple-500"/><a target="_blank" href={companyDetails?.website}>{companyDetails?.linkedIn}</a></p>
                         </div>
                     </div>
                     <div className="flex flex-wrap gap-2 mt-5">
@@ -144,67 +176,73 @@ const Profile: React.FC = () => {
                     <div>
                         <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Technology Stacks</h2>
                         <p className="text-xs text-gray-500">
-                        Learn about the technology and tools that Novalglam uses. 
+                        Learn about the technology and tools that {companyDetails.name} uses. 
                         </p>
                         <div className="flex flex-wrap gap-2 mt-5">
-                            <p className="border text-gray-500 text-xs py-1 px-4">HTML 5</p>
-                            <p className="border text-gray-500 text-xs py-1 px-4">CSS 3</p>
-                            <p className="border text-gray-500 text-xs py-1 px-4">REACT</p>
-                            <p className="border text-gray-500 text-xs py-1 px-4">REDUX</p>
-                            <p className="border text-gray-500 text-xs py-1 px-4">JAVA 8</p>
-                            <p className="border text-gray-500 text-xs py-1 px-4">SPRING BOOT</p>
-                            <p className="border text-gray-500 text-xs py-1 px-4">FRAMER</p>
-                            <p className="border text-gray-500 text-xs py-1 px-4">MIXPANEL</p>
-                            <p className="border text-gray-500 text-xs py-1 px-4">FIGMA</p>
-                            <p className="border text-gray-500 text-xs py-1 px-4">AGILE</p>
-                            <p className="border text-gray-500 text-xs py-1 px-4">SCRUM</p>
+                            {companyDetails?.techStacks?.map((tech: string, index: number) => (
+                                <p key={index} className="border text-gray-500 text-xs py-1 px-4">{tech}</p>
+                            ))}
                         </div>
                     </div>
-                   <div className="mt-6">
-  <p className="text-xs text-gray-500">
-    Discover the office locations to find the best fit for you.
-  </p>
-  <div className="flex flex-wrap gap-2 mt-5">
-    {Array.isArray(CompaniesDescriptions.office_locations) &&
-    CompaniesDescriptions.office_locations.length > 0 ? (
-      CompaniesDescriptions.office_locations.map((office, index) => (
-        <div key={index} className="flex flex-col gap-2">
-          <p className="text-xs text-gray-500">{office}</p>
-        </div>
-      ))
-    ) : (
-      <p className="text-gray-500">Office locations not available.</p>
-    )}
-  </div>
-</div>
-
+                    <div className="mt-6">
+                        <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Other Office Location</h2>
+                        <p className="text-xs text-gray-500">
+                            Discover {companyDetails?.name} other office locations to find the best fit for you.
+                        </p>
+                        <div className="flex flex-col flex-wrap gap-2 mt-5">
+                            {Array.isArray(companyDetails?.otherOfficeLocations) &&
+                                companyDetails?.otherOfficeLocations.length > 0 ? (
+                                    companyDetails?.otherOfficeLocations?.map((office: string, index: number) => (
+                                        <p key={index} className="text-xs text-purple-500">{`${office}`}</p>
+                                    )
+                                )
+                            ) : (
+                            <p className="text-gray-500">No other office location available.</p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="mb-6">
+                        <h2 className="text-xl text-midnight_blue-500 font-bold mb-2 mt-4">Perks & Benefits</h2>
+                        <p className="text-xs text-gray-500 mb-4">
+                            Here are the perks and benefits you'll enjoy working here.
+                        </p>
+                        {companyDetails?.perks?.map((perk: string, index: number) => (
+                            <p key={index} className="mt-2 text-xs text-gray-500">{perk}</p>
+                        ))}
+                    </div>
                 </div>
             </section>
-<section className="px-16 py-10">
-  <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Team</h2>
-  <div className="flex flex-wrap gap-4 mt-5">
-    {Array.isArray(CompaniesDescriptions.leadership_team) && CompaniesDescriptions.leadership_team.length > 0 ? (
-      CompaniesDescriptions.leadership_team.map((member, index) => (
-        <Card key={index} className="rounded-none w-44 h-44 shadow-none flex flex-col items-center">
-          <img src={member.picture} alt={member.name} className="w-14 h-14 mt-4 rounded-full" />
-          <h3 className="text-sm text-midnight_blue-500 font-medium mt-3">{member.name}</h3>
-          <p className="text-xs text-gray-500 mt-1">{member.role}</p>
-          <div className="flex gap-2 mt-4">
-            { <Instagram size={12} className="text-gray-500" />}
-            {  <Linkedin size={12} className="text-gray-500" />}
-          </div>
-        </Card>
-      ))
-    ) : (
-      <p className="text-gray-500">Leadership team information not available.</p>
-    )}
-  </div>
-</section>
+            <section className="px-16 py-10">
+                <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Team</h2>
+                <div className="flex flex-wrap gap-4 mt-5">
+                    {Array.isArray(companyDetails?.team) && companyDetails?.team?.length > 0 ? (
+                        companyDetails?.team?.map((member: string, index: number) => {
+                            const nameAndRole = member.split(' - ');
+                            return (
+                                <Card key={index} className="rounded-none w-44 h-44 shadow-none flex flex-col items-center justify-center">
+                                    <Avatar>
+                                        <AvatarFallback>{member[0]}</AvatarFallback>
+                                    </Avatar>
+                                    <h3 className="text-sm text-midnight_blue-500 font-medium mt-3">{nameAndRole[0]}</h3>
+                                    <p className="text-xs text-gray-500 mt-1">{nameAndRole[1]}</p>
+                                    <div className="flex gap-2 mt-4">
+                                        { <Instagram size={12} className="text-gray-500" />}
+                                        {  <Linkedin size={12} className="text-gray-500" />}
+                                    </div>
+                                </Card>
+                            )
+                        }
+                    )
+                    ) : (
+                    <p className="text-gray-500">Leadership team information not available.</p>
+                    )}
+                </div>
+            </section>
 
             <section className="px-16 py-10">
-                <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Perks & Benefits</h2>
+                <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Reviews</h2>
                 <p className="text-xs text-gray-500">
-                This job comes with the following perks and benefits
+                    Read reviews submitted to make informed decision
                 </p>
                 <div className="flex flex-wrap gap-4 mt-5">
 
@@ -218,35 +256,34 @@ const Profile: React.FC = () => {
                 />
                 <h2 className="text-xl text-midnight_blue-500 font-bold mb-2">Departments</h2>
                 <p className="text-xs text-gray-500">
-                You'll find all the department/domain Novalglam spans that could be your fit
+                You'll find all the department/domain {companyDetails?.name} spans that could be your fit
                 </p>
                 <div className="flex flex-wrap gap-2 mt-5">
-                {popularRoles.map((role, index) => (
-                    <div
-                    key={index}
-                    className="flex flex-col my-5 p-4 border w-56 cursor-pointer hover:scale-105 z-0 transition-transform"
+                {companyDetails?.domains?.map((domain: any, index: number) => (
+                    <Link to={`/placements/${domain.id}`}
+                        key={index}
+                        className="flex flex-col my-5 p-4 border w-56 cursor-pointer hover:scale-105 z-0 transition-transform"
                     >
-                    <div className="flex justify-between mb-5">
-                        <h4 className="font-medium text-sm text-midnight_blue-500">
-                        {role.name}
-                        </h4>
-                        <img src={role.img} alt={`${role.name} icon`} className="w-4" />
-                    </div>
-                    <p className="text-xs opacity-50 mb-5">
-                        {role.name} is one of the most sought after roles, click find
-                        placement under this role...
-                    </p>
-                    <div className="flex gap-2 items-center">
-                        {role.category.map((cat, index) => (
-                        <p
-                            className={`text-[10px] ${categoryColorCode[cat]} font-thin px-2 py-1 rounded-full`}
-                            key={index}
-                        >
-                            {cat}
+                        <div className="flex justify-between mb-5">
+                            <h4 className="font-medium text-sm text-midnight_blue-500">
+                                {domain.name}
+                            </h4>
+                            <img src={icons.design} alt='icon'className="w-4" />
+                        </div>
+                        <p className="text-xs opacity-50 mb-5">
+                            {domain?.description}
                         </p>
-                        ))}
-                    </div>
-                    </div>
+                        <div className="flex gap-2 items-center">
+                            {domain?.tags?.map((tag: string, index: number) => (
+                            <p
+                                className={`text-[10px] ${categoryColorCode[tag]} font-thin px-2 py-1 rounded-full`}
+                                key={index}
+                            >
+                                {tag}
+                            </p>
+                            ))}
+                        </div>
+                    </Link>
                 ))}
                 </div>
             </section>

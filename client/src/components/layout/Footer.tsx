@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
             <div className='flex gap-16 pb-16 justify-between'>
                 <div className='w-max'>
                     <h4 className='text-sm mb-4'>internlab</h4>
-                    <p className='text-xs font-thin w-3/5 opacity-70'>Great platform for the job seeker that passionate about startups. Find your dream job easier.</p>
+                    <p className='text-xs font-thin w-3/5 opacity-70'>Great platform for students looking for industry placement. Find your dream company or placemet easier.</p>
                 </div>
                 <div className='flex gap-16'>
                     <div>
@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
                 </div>
                 <div>
                     <h4 className='text-sm mb-4'>Get placement notifications</h4>
-                    <p className='text-xs font-thin opacity-70'>The latest job news, articles, sent to your inbox weekly.</p>
+                    <p className='text-xs font-thin opacity-70'>The latest placement news, articles, sent to your inbox weekly.</p>
                     <form className='flex mt-5 gap-2'>
                         <input className='px-3 py-1 outline-0 text-black text-xs text-midnight_blue-500' type='email' placeholder='you@email.com' />
                         <Button className='rounded-none bg-purple-500 text-xs'>Subscribe</Button>

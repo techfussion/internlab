@@ -48,7 +48,7 @@ interface Submission {
 
 export default function SubmissionsPage() {
   const [submissions, setSubmissions] = React.useState<Submission[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
     // fetchSubmissions();

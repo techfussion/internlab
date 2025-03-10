@@ -126,6 +126,8 @@ export class DomainService {
               id: true,
               name: true,
               logo: true,
+              state: true,
+              country: true,
             },
           },
           tags: true,

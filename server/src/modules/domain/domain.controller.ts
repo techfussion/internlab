@@ -6,12 +6,13 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('domains')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(RolesGuard)
 export class DomainController {
   constructor(private readonly domainService: DomainService) {}
 
   @Post()
   @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard)
   create(@Body() createDomainDto: CreateDomainDto) {
     return this.domainService.create(createDomainDto);
   }
@@ -28,12 +29,14 @@ export class DomainController {
 
   @Patch(':id')
   @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() updateDomainDto: UpdateDomainDto) {
     return this.domainService.update(id, updateDomainDto);
   }
 
   @Delete(':id')
   @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard)
   delete(@Param('id') id: string) {
     return this.domainService.delete(id);
   }

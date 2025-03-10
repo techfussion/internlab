@@ -13,7 +13,7 @@ export const HeroSection: React.FC = () => (
         </h1>
         <img src={Dashes} alt="decorative dashes" className="w-[550px]" />
         <p className="opacity-70 text-sm text-gray-500 w-5/12 my-6">
-          Great platform for the job seeker that searching for new career heights and passionate about startups.
+          Great platform for students searching for placements for their SIWES or looking to get started with their career.
         </p>
         <SearchBar />
         <PopularSearchTerms />
