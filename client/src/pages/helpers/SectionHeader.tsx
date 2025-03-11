@@ -6,8 +6,9 @@ export const SectionHeader: React.FC<{
     highlightedWord: string;
     showAll?: boolean;
     route?: string;
-  }> = ({ title, highlightedWord, showAll = true, route }) => (
-    <div className="flex justify-between items-center">
+    className?: string;
+  }> = ({ title, highlightedWord, showAll = true, route, className }) => (
+    <div className={`flex justify-between items-center ${className}`}>
       <h2 className="text-4xl text-midnight_blue-500 font-bold">
         {title}{" "}
         <span className="text-blue-500">{highlightedWord}</span>

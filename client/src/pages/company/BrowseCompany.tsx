@@ -4,6 +4,7 @@ import Nav from "@/components/layout/Nav";
 import SearchBar from "@/components/SearchBar";
 import { POPULAR_SEARCH_COMPANIES } from "@/global/constants";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
     Pagination,
     PaginationContent,
@@ -37,14 +38,14 @@ const BrowseCompany: React.FC = () => {
     const [companies, setCompanies] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
-    const token = localStorage.getItem('token');
+    const location = useLocation();
   
     const fetchCompanies = async (page = 1) => {
       try {
         setLoading(true);
-        const response = await apiClient.get(`/companies?page=${page}&limit=10`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+
+        const params = new URLSearchParams(location.search);
+        const response = await apiClient.get(`/companies?page=${page}&limit=10`, { params });
         
         const { meta, data } = response.data;
   
@@ -89,7 +90,7 @@ const BrowseCompany: React.FC = () => {
   
     useEffect(() => {
         fetchCompanies(currentPage);
-    }, [currentPage]);
+    }, [currentPage, location.search]);
   
     return (
         <>
@@ -102,16 +103,15 @@ const BrowseCompany: React.FC = () => {
                     {/* <img src={Dashes} alt="Decorative dashes" className="w-[250px] mt-2 float-right" /> */}
                     <p className="opacity-70 text-sm my-6 mt-4">Find the dream company you would like to work.</p>
                     <div className="mt-3">
-                        <SearchBar className="w-full" buttonText="Search" stretch/>
+                        <SearchBar className="w-full" buttonText="Search" page="companies" stretch/>
                         <PopularSearchTerms />
                     </div>
                 </div>
             </section>
 
-            <section className="flex justify-center self-center px-16 py-10 ">
-
+            <section className="flex px-16 py-10 ">
                 <aside className="pt-[3rem]">
-                <Filters/>
+                <Filters page="companies"/>
                 </aside>
                 <div className="px-16 py-10">
                     <h2 className="text-xl text-midnight_blue-500 font-bold mb-1">Recommended Companies</h2>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Footer from "@/components/layout/Footer";
 import { SectionHeader, HeroSection, CompanyLogos, CategoryGrid } from "./helpers";
@@ -7,18 +7,41 @@ import pattern from "@/assets/Pattern.png";
 
 import {
   category,
-  popularRoles,
-  popularCompanies,
   categoryColorCode,
 } from "@/global/constants";
 import { icons } from "@/global/imageUtil";
 import RecommendationBanner from "@/components/layout/RecommendationBanner";
-// import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import apiClient from "@/interceptor/axios.interceptor";
 
 
 const Home: React.FC = () => {
-;
+  const [loading, setLoading] = useState<boolean>(false);
+  const [companies, setCompanies] = useState<any[]>([]);
+  const [domains, setDomains] = useState<any[]>([]);
+
+  const fetchHomeData = async (page = 1) => {
+    try {
+      setLoading(true);
+      const response = await apiClient.get(`/companies?page=${page}&limit=10`);
+      const responseDomain = await apiClient.get(`/domains?page=${page}&take=10`);
+
+      const { data } = response.data;
+      const { domains } = responseDomain.data;
+
+      setCompanies(data);
+      setDomains(domains);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchHomeData();
+  }, [])
+
   return (
     <>
       <HeroSection />
@@ -32,23 +55,23 @@ const Home: React.FC = () => {
       <RecommendationBanner />
       
       <section className="px-16 mt-10 pb-10">
-        <SectionHeader title="Popular" highlightedWord="companies" route="/companies"/>
+        <SectionHeader title="Popular" highlightedWord="companies" showAll route="/companies"/>
 
         <div className="flex flex-wrap gap-2 mt-5">
-          {popularCompanies.map((company, index) => (
+          {companies?.map((company, index) => (
             <Link
               key={index}
-              to={`/${company.name.replace(/\s+/g, '-').toLowerCase()}/description`}
+              to={`/companies/${company?.id}`}
               className="flex flex-col my-5 p-4 border w-56 cursor-pointer hover:scale-105 z-[1] transition-transform"
             >
               <div className="flex flex-col mb-5 gap-3">
-                <img src={company.img} alt={`${company.name} logo`} className="w-4" />
+                <img src={company?.logo} onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = icons.design; }} alt={`${company.name} logo`} className="w-4" />
                 <h4 className="font-medium text-sm text-midnight_blue-500">
                   {company.name}
                 </h4>
               </div>
               <p className="text-xs opacity-50 mb-5">
-                {company.about.slice(0, 100)}...
+                {company?.description?.slice(0, 100)}...
               </p>
               <div className="flex gap-1">
                 <p className="text-[10px] font-extralight text-purple-500">
@@ -68,34 +91,40 @@ const Home: React.FC = () => {
           alt="decorative pattern"
           className="absolute top-0 right-0 w-2/4 h-full"
         />
-        <SectionHeader title="Popular" highlightedWord="roles" route="/placements"/>
-        <div className="flex flex-wrap gap-2 mt-5">
-          {popularRoles.map((role, index) => (
-            <div
+        <SectionHeader title="Popular" highlightedWord="roles" showAll route="/placements" className="z-30"/>
+        <div className="flex flex-wrap gap-2 mt-5 z-10">
+          {domains?.map((domain, index) => (
+            <Link
+              to={`/placements/${domain?.id}`}
               key={index}
-              className="flex flex-col my-5 p-4 border w-56 cursor-pointer hover:scale-105 z-[1] transition-transform"
+              className="flex flex-col my-5 p-4 bg-white-900 border w-56 cursor-pointer hover:scale-105 z-[1] transition-transform"
             >
               <div className="flex justify-between mb-5">
                 <h4 className="font-medium text-sm text-midnight_blue-500">
-                  {role.name}
+                  {domain?.name}
                 </h4>
-                <img src={role.img} alt={`${role.name} icon`} className="w-4" />
+                <img src={domain?.company?.logo} onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = icons.design; }} alt={`${domain?.name} icon`} className="w-4" />
               </div>
               <p className="text-xs opacity-50 mb-5">
-                {role.name} is one of the most sought after roles, click find
-                placement under this role...
+                {domain?.description}
               </p>
               <div className="flex gap-2 items-center">
-                {role.category.map((cat, index) => (
+                {domain?.tags?.map((tag: string, index: number) => (
                   <p
-                    className={`text-[10px] ${categoryColorCode[cat]} font-thin px-2 py-1 rounded-full`}
+                    className={`text-[10px] ${categoryColorCode[tag]} font-thin px-2 py-1 rounded-full`}
                     key={index}
                   >
-                    {cat}
+                    {tag}
                   </p>
                 ))}
               </div>
-            </div>
+              <div className="flex gap-1">
+                <p className="text-[10px] font-extralight text-purple-500">
+                  View
+                </p>
+                <img src={icons.arrowRightBlue} alt="arrow" className="w-2" />
+              </div>
+            </Link>
           ))}
         </div>
       </section>

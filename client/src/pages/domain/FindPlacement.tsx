@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Nav from "@/components/layout/Nav"
+import { useLocation } from "react-router-dom";
 import SearchBar from "@/components/SearchBar"
 import { PopularSearchTerms } from "@/pages/helpers/PopularSearchTerms"
 import {
@@ -19,6 +20,7 @@ import { Button } from "@/components/ui/button"
 import apiClient from "@/interceptor/axios.interceptor"
 import { Card } from "@/components/ui/card"
 import { Link } from "react-router-dom"
+import { icons } from "@/global/imageUtil"
 
 type Jobs = {
   id: string;
@@ -42,11 +44,14 @@ function FindPlacement() {
   const [placements, setPlacements] = useState<Jobs[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const location = useLocation();
 
   const fetchPlacements = async (page = 1) => {
     try {
       setLoading(true);
-      const response = await apiClient.get(`/domains?page=${page}&take=10`);
+
+      const params = new URLSearchParams(location.search);
+      const response = await apiClient.get(`/domains?page=${page}&take=10`, { params });
       
       const { meta, domains } = response.data;
       const totalPages = Math.ceil(meta.total / meta.take);
@@ -93,7 +98,7 @@ function FindPlacement() {
 
   useEffect(() => {
     fetchPlacements(currentPage);
-  }, [currentPage]);
+  }, [currentPage, location.search]);
 
   return (
     <>
@@ -105,7 +110,7 @@ function FindPlacement() {
           </h1>
           <p className="opacity-70 text-sm my-6 mt-4">Here you will find specific roles or position offered by companies</p>
           <div className="mt-3">
-            <SearchBar className="w-full" buttonText="Search" stretch />
+            <SearchBar className="w-full" page="placements" buttonText="Search" stretch />
             <PopularSearchTerms />
           </div>
         </div>
@@ -115,7 +120,7 @@ function FindPlacement() {
         <div className="flex gap-8">
           {/* Sidebar */}
           <aside className="w-64 flex-shrink-0">
-            <Filters />
+            <Filters page="placements"/>
           </aside>
 
           {/* Main Content */}
@@ -130,8 +135,8 @@ function FindPlacement() {
                     key={placement.id}
                     className="bg-white p-6 flex items-center gap-6 shadow-sm rounded-none"
                   >
-                    <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <img src={placement?.company?.logo || "/placeholder.svg"} alt={placement?.company?.name} width={32} height={32} />
+                    <div className="w-12 h-12 bg-white-900 rounded-lg flex items-center justify-center">
+                      <img src={placement?.company?.logo} onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = icons.design; }} alt={placement?.company?.name} width={32} height={32} />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-medium mb-1">{placement?.name}</h3>
