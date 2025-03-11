@@ -126,8 +126,8 @@ function FindPlacement() {
           {/* Main Content */}
           <main className="flex-1">
             <div>
-              <h2 className="text-xl text-midnight_blue-500 font-bold mb-1">Recommended Placements</h2>
-              <p className="text-[10px] text-gray-500 mb-6">By profile or peoples popular choices</p>
+              <h2 className="text-xl text-midnight_blue-500 font-bold mb-1">{location.pathname === 'placements' ? "Recommended Placements": "Placement Results"}</h2>
+              <p className="text-[10px] text-gray-500 mb-6">{location.pathname === 'placements' ? "By profile or peoples popular choices": "Based on filters or search"}</p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {placements?.map((placement) => (

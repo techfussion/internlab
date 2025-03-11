@@ -15,7 +15,7 @@ export const HeroSection: React.FC = () => (
         <p className="opacity-70 text-sm text-gray-500 w-5/12 my-6">
           Great platform for students searching for placements for their SIWES or looking to get started with their career.
         </p>
-        <SearchBar />
+        <SearchBar page="placements" />
         <PopularSearchTerms />
       </section>
     </section>

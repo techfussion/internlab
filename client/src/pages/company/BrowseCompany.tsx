@@ -114,8 +114,8 @@ const BrowseCompany: React.FC = () => {
                 <Filters page="companies"/>
                 </aside>
                 <div className="px-16 py-10">
-                    <h2 className="text-xl text-midnight_blue-500 font-bold mb-1">Recommended Companies</h2>
-                    <p className="text-[10px] text-gray-500">By profile or peoples popular choices</p>
+                    <h2 className="text-xl text-midnight_blue-500 font-bold mb-1">{location.pathname === 'placements' ? "Recommended Companies": "Company Results"}</h2>
+                    <p className="text-[10px] text-gray-500 mb-6">{location.pathname === 'placements' ? "By profile or peoples popular choices": "Based on filters or search"}</p>
                     <div className="flex flex-wrap gap-2 mt-5">
                         {companies.map((company, index) => (
                             <div
