@@ -10,6 +10,8 @@ import { Form, FormField, FormItem, FormControl, FormLabel, FormMessage } from "
 import { REACT_APP_API_BASE } from "@/global/constants";
 import { useToast } from "@/hooks/use-toast";
 
+console.log("API BASE URL:", REACT_APP_API_BASE);
+
 // Define validation schema with Zod
 const formSchema = z
   .object({
@@ -38,6 +40,7 @@ const Signup: React.FC = () => {
   const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     try {
         setLoading(true);
+        console.log("API BASE URL:", REACT_APP_API_BASE);
         const response = await axios.post(`${REACT_APP_API_BASE}/auth/register`, data);
 
         // Extract token and user data
