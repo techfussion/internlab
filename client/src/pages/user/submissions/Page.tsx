@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment,useState } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -7,7 +7,7 @@ import {
   CardDescription,
 //   CardFooter
 } from '@/components/ui/card';
-// import { Button } from '@/components/ui/button';
+ import { Button } from '@/components/ui/button';
 import { 
   FileText,
   Clock,
@@ -25,10 +25,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Nav from '@/components/layout/Nav';
 import { submissionData } from '@/global/dummy-data';
+import { CompanyForm } from './Components/Company-Form';
 
 type SubmissionType = 'NEW_COMPANY' | 'UPDATE_COMPANY' | 'NEW_DOMAIN' | 'UPDATE_DOMAIN';
 type SubmissionStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
@@ -49,6 +58,7 @@ interface Submission {
 export default function SubmissionsPage() {
   const [submissions, setSubmissions] = React.useState<Submission[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [open, setOpen] = useState(false)
 
   React.useEffect(() => {
     // fetchSubmissions();
@@ -156,7 +166,21 @@ export default function SubmissionsPage() {
   return (
     <Fragment>
         <Nav />
-        <main className="container py-8 px-4 lg:px-16">
+        <main className="container py-8 px-4 lg:px-16 ">
+          <div className='text-right pb-[1rem] '>
+         <Dialog open={open} onOpenChange={setOpen} >
+      <DialogTrigger asChild>
+        <Button size="lg">Post Submission</Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gray-50">
+        <DialogHeader>
+          <DialogTitle>Company Information</DialogTitle>
+          <DialogDescription>Add details about your company and domains.</DialogDescription>
+        </DialogHeader>
+        <CompanyForm onComplete={() => setOpen(false)} />
+      </DialogContent>
+    </Dialog>
+          </div>
             <Card>
                 <CardHeader>
                 <CardTitle className="flex items-center gap-2">
