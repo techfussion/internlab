@@ -27,8 +27,9 @@ const Profile: React.FC = () => {
     const [ loading, setLoading ] = useState<boolean>(false);
     const [ companyDetails, setCompanyDetails ] = useState<any>({});
     const pathname = useParams();
-      const [isBookmarked, setIsBookmarked] = useState(false);
+    const [isBookmarked, setIsBookmarked] = useState(false);
     const [bookmarkLoading, setBookmarkLoading] = useState(false);
+
     const fetchCompanyDetails= async () => {
         try {
           setLoading(true);
@@ -115,11 +116,11 @@ const toggleBookmark = async () => {
     }
 
     console.log("Domain ID (before sending):", domainToBookmark.id, typeof domainToBookmark.id);
-console.log("Domain ID Sent:", domainToBookmark.id, typeof domainToBookmark.id);
+    console.log("Domain ID Sent:", domainToBookmark.id, typeof domainToBookmark.id);
 
     const response = await apiClient.post(
       `${REACT_APP_API_BASE}/bookmarks`,
-      { domainId: String(domainToBookmark.id) }, 
+      { domainId: String(domainToBookmark.id)}, 
       { headers }
     );
     

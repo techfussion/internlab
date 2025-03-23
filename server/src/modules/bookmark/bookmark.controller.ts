@@ -23,16 +23,17 @@ export class BookmarkController {
     @CurrentUser() user: any,
     @Body() createBookmarkDto: CreateBookmarkDto,
   ) {
-    console.log('Authenticated User:', user);
+    // console.log('Authenticated User:', user);
+    return this.bookmarkService.create(user.sub, createBookmarkDto);
   }
 
   @Get()
   findAll(@CurrentUser() user: any) {
-    return this.bookmarkService.findAll(user.id);
+    return this.bookmarkService.findAll(user.sub);
   }
 
   @Delete(':domainId')
   remove(@CurrentUser() user: any, @Param('domainId') domainId: string) {
-    return this.bookmarkService.remove(user.id, domainId);
+    return this.bookmarkService.remove(user.sub, domainId);
   }
 }
