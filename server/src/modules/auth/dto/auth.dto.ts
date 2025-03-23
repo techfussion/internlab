@@ -1,8 +1,15 @@
-import { IsEmail, IsString, IsNotEmpty, MinLength, IsEnum, IsOptional } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  IsNotEmpty,
+  MinLength,
+  IsEnum,
+  IsOptional,
+} from 'class-validator';
 
 enum Role {
   ADMIN,
-  USER
+  USER,
 }
 
 export class RegisterDto {
@@ -32,7 +39,6 @@ export class RegisterDto {
   @IsString()
   level: string;
 }
-
 
 export class LoginDto {
   @IsEmail()
