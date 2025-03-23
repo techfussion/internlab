@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBookmarkDto, BookmarkResponseDto } from './dto/bookmark.dto';
 
@@ -6,12 +11,22 @@ import { CreateBookmarkDto, BookmarkResponseDto } from './dto/bookmark.dto';
 export class BookmarkService {
   constructor(private prisma: PrismaService) {}
 
-  async create(userId: string, createBookmarkDto: CreateBookmarkDto): Promise<BookmarkResponseDto> {
+  async create(
+    userId: string,
+    createBookmarkDto: CreateBookmarkDto,
+  ): Promise<BookmarkResponseDto> {
+    if (!userId) {
+      throw new BadRequestException('User ID is required');
+    }
     try {
       const bookmark = await this.prisma.bookmark.create({
         data: {
-          userId,
-          domainId: createBookmarkDto.domainId,
+          user: {
+            connect: { id: userId },
+          },
+          domain: {
+            connect: { id: createBookmarkDto.domainId },
+          },
         },
         include: {
           domain: {
@@ -23,11 +38,11 @@ export class BookmarkService {
                 select: {
                   id: true,
                   name: true,
-                }
-              }
-            }
-          }
-        }
+                },
+              },
+            },
+          },
+        },
       });
       return this.mapToResponseDto(bookmark);
     } catch (error) {
@@ -51,19 +66,19 @@ export class BookmarkService {
               select: {
                 id: true,
                 name: true,
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
     return bookmarks.map(this.mapToResponseDto);
   }
 
   async remove(userId: string, domainId: string): Promise<void> {
     const bookmark = await this.prisma.bookmark.findFirst({
-      where: { userId, domainId }
+      where: { userId, domainId },
     });
 
     if (!bookmark) {
@@ -71,7 +86,7 @@ export class BookmarkService {
     }
 
     await this.prisma.bookmark.delete({
-      where: { id: bookmark.id }
+      where: { id: bookmark.id },
     });
   }
 
@@ -81,7 +96,7 @@ export class BookmarkService {
       userId: bookmark.userId,
       domainId: bookmark.domainId,
       createdAt: bookmark.createdAt,
-      domain: bookmark.domain
+      domain: bookmark.domain,
     };
   }
 }
