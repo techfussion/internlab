@@ -20,13 +20,15 @@ import apiClient from "@/interceptor/axios.interceptor";
 import { icons } from "@/global/imageUtil";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { toast } from "@/hooks/use-toast";
+import { REACT_APP_API_BASE } from "@/global/constants";
   
 const Profile: React.FC = () => {
     const [ loading, setLoading ] = useState<boolean>(false);
     const [ companyDetails, setCompanyDetails ] = useState<any>({});
     const pathname = useParams();
-    //   const [isBookmarked, setIsBookmarked] = useState(false)
-
+      const [isBookmarked, setIsBookmarked] = useState(false);
+    const [bookmarkLoading, setBookmarkLoading] = useState(false);
     const fetchCompanyDetails= async () => {
         try {
           setLoading(true);
@@ -46,7 +48,113 @@ const Profile: React.FC = () => {
         fetchCompanyDetails()
     }, [])
 
+    
+
     console.log(companyDetails);
+
+  const checkBookmarkStatus = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const response = await apiClient.get(`${REACT_APP_API_BASE}/bookmarks`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const userBookmarks = response.data;
+
+    if (companyDetails?.id && userBookmarks.length > 0) {
+      const isBookmarked = userBookmarks.some(
+        (bookmark: any) => bookmark.companyId === companyDetails.id
+      );
+      setIsBookmarked(isBookmarked);
+    }
+  } catch (err) {
+    console.error("Error checking bookmark status:", err);
+  }
+};
+
+const toggleBookmark = async () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    toast?.({
+      title: "Authentication Error",
+      description: "You need to be logged in to bookmark",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  if (isBookmarked) {
+    toast?.({
+      title: "Company already bookmarked",
+      description: "You have already bookmarked this company.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  try {
+    setBookmarkLoading(true);
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+
+    const domainToBookmark = companyDetails.domains?.[0]; 
+
+    if (!domainToBookmark || !domainToBookmark.id) {
+      toast?.({
+        title: "Error",
+        description: "Invalid domain data. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    console.log("Domain ID (before sending):", domainToBookmark.id, typeof domainToBookmark.id);
+console.log("Domain ID Sent:", domainToBookmark.id, typeof domainToBookmark.id);
+
+    const response = await apiClient.post(
+      `${REACT_APP_API_BASE}/bookmarks`,
+      { domainId: String(domainToBookmark.id) }, 
+      { headers }
+    );
+    
+
+    console.log("Bookmark Response:", response.data);
+    setIsBookmarked(true);
+    toast?.({
+      title: "Bookmarked",
+      description: `Added ${companyDetails.name} to your bookmarks`,
+    });
+
+    await checkBookmarkStatus();
+  } catch (err: any) {
+    console.error("Error:", err.response?.status, err.response?.data);
+    toast?.({
+      title: "Error",
+      description:
+        err.response?.status === 401
+          ? "Please log in again"
+          : err.response?.data?.message || "Failed to update bookmark",
+      variant: "destructive",
+    });
+  } finally {
+    setBookmarkLoading(false);
+  }
+};
+
+
+useEffect(() => {
+  if (companyDetails?.id) {
+    checkBookmarkStatus();
+  }
+}, [companyDetails]);
+
+   
 
     if (!companyDetails) {
         return <p className="text-center text-red-500">Companies Description not found!</p>
@@ -90,8 +198,14 @@ const Profile: React.FC = () => {
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <p className="text-xs">Rating: {companyDetails?.avgRating}</p>
-                                    <Button size='icon' variant='outline'>
-                                        <Bookmark size={16}/>
+                                    <Button size='icon' variant='outline'
+                                        onClick={toggleBookmark}
+                                        disabled={bookmarkLoading}>
+                                      <Bookmark 
+                                            size={16} 
+                                            fill={isBookmarked ? "#4640DE" : "none"} 
+                                            color={isBookmarked ? "#4640DE" : "currentColor"}
+                                        />
                                     </Button>
                                 </div>
                             </div>
