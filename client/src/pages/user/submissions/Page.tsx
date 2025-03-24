@@ -10,9 +10,7 @@ import {
  import { Button } from '@/components/ui/button';
 import { 
   FileText,
-  Clock,
-  CheckCircle2,
-  XCircle,
+  
   Building2,
   Layers,
   AlertCircle,
@@ -36,9 +34,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Nav from '@/components/layout/Nav';
-import { submissionData } from '@/global/dummy-data';
+// import { submissionData } from '@/global/dummy-data';
 import { CompanyForm } from './Components/Company-Form';
-
+import apiClient from '@/interceptor/axios.interceptor';
+import { REACT_APP_API_BASE } from '@/global/constants';
 type SubmissionType = 'NEW_COMPANY' | 'UPDATE_COMPANY' | 'NEW_DOMAIN' | 'UPDATE_DOMAIN';
 type SubmissionStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
@@ -60,75 +59,93 @@ export default function SubmissionsPage() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [open, setOpen] = useState(false)
 
-  React.useEffect(() => {
-    // fetchSubmissions();
-    setSubmissions(submissionData as Submission[])
-  }, []);
+ 
 
-  const fetchSubmissions = async () => {
-    try {
-      // Replace with actual API call
-      const response = await fetch('/api/user/submissions');
-      const data = await response.json();
-      setSubmissions(data);
-    } catch (error) {
-      console.error('Error fetching submissions:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+ const fetchSubmissions = async () => {
+  try {
+    // Retrieve token from local storage (or your auth state)
+    const token = localStorage.getItem('token'); 
 
-  const getSubmissionTypeDetails = (type: SubmissionType) => {
-    switch (type) {
-      case 'NEW_COMPANY':
-        return {
-          label: 'New Company',
-          icon: Building2,
-          color: 'text-blue-500'
-        };
-      case 'UPDATE_COMPANY':
-        return {
-          label: 'Company Update',
-          icon: Building2,
-          color: 'text-purple-500'
-        };
-      case 'NEW_DOMAIN':
-        return {
-          label: 'New Domain',
-          icon: Layers,
-          color: 'text-green-500'
-        };
-      case 'UPDATE_DOMAIN':
-        return {
-          label: 'Domain Update',
-          icon: Layers,
-          color: 'text-orange-500'
-        };
+    if (!token) {
+      console.error('No authentication token found.');
+      return;
     }
-  };
 
-  const getStatusDetails = (status: SubmissionStatus) => {
-    switch (status) {
-      case 'PENDING':
-        return {
-          label: 'Pending Review',
-          icon: Clock,
-          color: 'bg-yellow-500/10 text-yellow-500'
-        };
-      case 'APPROVED':
-        return {
-          label: 'Approved',
-          icon: CheckCircle2,
-          color: 'bg-green-500/10 text-green-500'
-        };
-      case 'REJECTED':
-        return {
-          label: 'Rejected',
-          icon: XCircle,
-          color: 'bg-red-500/10 text-red-500'
-        };
+    // Make request with Authorization header
+    const response = await apiClient.get(`${REACT_APP_API_BASE}/submissions`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    setSubmissions(response.data);
+  } catch (error) {
+    console.error('Error fetching submissions:', error);
+
+    if (error.response?.status === 401) {
+      alert('Session expired. Please log in again.');
+
     }
-  };
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+React.useEffect(() => {
+  fetchSubmissions();
+}, []);
+
+  // const getSubmissionTypeDetails = (type: SubmissionType) => {
+  //   switch (type) {
+  //     case 'NEW_COMPANY':
+  //       return {
+  //         label: 'New Company',
+  //         icon: Building2,
+  //         color: 'text-blue-500'
+  //       };
+  //     case 'UPDATE_COMPANY':
+  //       return {
+  //         label: 'Company Update',
+  //         icon: Building2,
+  //         color: 'text-purple-500'
+  //       };
+  //     case 'NEW_DOMAIN':
+  //       return {
+  //         label: 'New Domain',
+  //         icon: Layers,
+  //         color: 'text-green-500'
+  //       };
+  //     case 'UPDATE_DOMAIN':
+  //       return {
+  //         label: 'Domain Update',
+  //         icon: Layers,
+  //         color: 'text-orange-500'
+  //       };
+  //   }
+  // };
+
+  // const getStatusDetails = (status: SubmissionStatus) => {
+  //   switch (status) {
+  //     case 'PENDING':
+  //       return {
+  //         label: 'Pending Review',
+  //         icon: Clock,
+  //         color: 'bg-yellow-500/10 text-yellow-500'
+  //       };
+  //     case 'APPROVED':
+  //       return {
+  //         label: 'Approved',
+  //         icon: CheckCircle2,
+  //         color: 'bg-green-500/10 text-green-500'
+  //       };
+  //     case 'REJECTED':
+  //       return {
+  //         label: 'Rejected',
+  //         icon: XCircle,
+  //         color: 'bg-red-500/10 text-red-500'
+  //       };
+  //   }
+  // };
 
   const formatChanges = (data: any) => {
     return Object.entries(data).map(([key, value]) => {
@@ -203,8 +220,6 @@ export default function SubmissionsPage() {
                 ) : (
                     <Accordion type="single" collapsible className="space-y-4">
                     {submissions.map((submission) => {
-                        const typeDetails = getSubmissionTypeDetails(submission.type);
-                        const statusDetails = getStatusDetails(submission.status);
 
                         return (
                         <AccordionItem 
@@ -226,27 +241,7 @@ export default function SubmissionsPage() {
                                     <Building2 className="h-6 w-6 text-muted-foreground" />
                                     </div>
                                 )}
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                    <typeDetails.icon className={`h-4 w-4 ${typeDetails.color}`} />
-                                    <span className="font-medium">{typeDetails.label}</span>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground mt-1">
-                                    {submission.company.name}
-                                    </p>
-                                    <div className="flex items-center gap-2 mt-1">
-                                    <Badge 
-                                        variant="secondary"
-                                        className={statusDetails.color}
-                                    >
-                                        <statusDetails.icon className="h-3 w-3 mr-1" />
-                                        {statusDetails.label}
-                                    </Badge>
-                                    <span className="text-sm text-muted-foreground">
-                                        {new Date(submission.createdAt).toLocaleDateString()}
-                                    </span>
-                                    </div>
-                                </div>
+                               
                                 </div>
                                 <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200" />
                             </div>

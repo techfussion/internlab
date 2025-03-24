@@ -1,17 +1,26 @@
-import { IsString, IsEnum, IsOptional, ValidateNested, IsArray, IsBoolean, IsNumber, IsObject } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsOptional,
+  ValidateNested,
+  IsArray,
+  IsBoolean,
+  IsNumber,
+  IsObject,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export enum SubmissionType {
   NEW_COMPANY = 'NEW_COMPANY',
   UPDATE_COMPANY = 'UPDATE_COMPANY',
   NEW_DOMAIN = 'NEW_DOMAIN',
-  UPDATE_DOMAIN = 'UPDATE_DOMAIN'
+  UPDATE_DOMAIN = 'UPDATE_DOMAIN',
 }
 
 export enum SubmissionStatus {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED'
+  REJECTED = 'REJECTED',
 }
 
 // Base Company DTO for submissions
@@ -45,7 +54,6 @@ export class CompanySubmissionDto {
   @IsString()
   country: string;
 
-  @IsArray()
   @IsString({ each: true })
   @IsOptional()
   industryType?: string[];
@@ -100,7 +108,10 @@ export class CreateSubmissionDto {
   @IsObject()
   @ValidateNested()
   @Type((opts) => {
-    if (opts?.object?.type === SubmissionType.NEW_COMPANY || opts?.object?.type === SubmissionType.UPDATE_COMPANY) {
+    if (
+      opts?.object?.type === SubmissionType.NEW_COMPANY ||
+      opts?.object?.type === SubmissionType.UPDATE_COMPANY
+    ) {
       return CompanySubmissionDto;
     }
     return DomainSubmissionDto;
