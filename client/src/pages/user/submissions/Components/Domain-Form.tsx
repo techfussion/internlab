@@ -9,8 +9,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { type DomainType, domainSchema } from "./company-form"
-
+import apiClient from "@/interceptor/axios.interceptor"
+import { REACT_APP_API_BASE } from "@/global/constants"
+import { DomainType, domainSchema } from "./Company-Form"
+import { toast } from "@/hooks/use-toast"
 interface DomainFormProps {
   domain?: DomainType
   onSave: (domain: DomainType) => void
@@ -31,9 +33,60 @@ export function DomainForm({ domain, onSave }: DomainFormProps) {
     defaultValues,
   })
 
-  function onSubmit(data: DomainType) {
+  async function onSubmit(data: DomainType) {
+    const token = localStorage.getItem("token");
+  
+  if (!token) {
+    toast?.({
+      title: "Authentication Error",
+      description: "You need to be logged in to submit",
+      variant: "destructive",
+    });
+    return;
+  }
+ try {
+    const response = await apiClient.post(
+      `${REACT_APP_API_BASE}/domains`,
+      {
+        name: data.name,
+        requirements: data.requirements,
+         stipendAmount: data. stipendAmount,
+        perks: Array.isArray(data.perks) ? data.perks : [],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+   
+    console.log("domain created successfully:", response.data);
+
+     toast({
+        title: "success",
+        description: "Domain created sucessfully",
+         variant: "success",
+      });
+  } catch (error: any) {
+    console.error("Error saving domain:", error.response?.data || error.message);
+    
+    if (error.response?.status === 403) {
+      toast({
+        title: "Permission Denied",
+        description: "You do not have permission to create a domain. Contact admin.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to save domain",
+        variant: "destructive",
+      });
+    }
+  }
     onSave(data)
-    form.reset(defaultValues)
+   
   }
 
   return (
@@ -110,9 +163,7 @@ export function DomainForm({ domain, onSave }: DomainFormProps) {
             />
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button type="button" variant="outline" onClick={() => form.reset(defaultValues)}>
-              Reset
-            </Button>
+           
             <Button type="submit">{isEditing ? "Update Domain" : "Save Domain"}</Button>
           </CardFooter>
         </form>

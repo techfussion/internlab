@@ -4,7 +4,7 @@ import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Plus, Trash2 } from "lucide-react"
+import { Import, Plus, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,8 +13,11 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/hooks/use-toast"
-import { DomainForm } from "./domain-form"
+import { DomainForm } from "./Domain-Form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { REACT_APP_API_BASE } from "@/global/constants"
+import apiClient from "@/interceptor/axios.interceptor" 
+
 
 // Define the company schema
 const companyFormSchema = z.object({
@@ -90,22 +93,69 @@ export function CompanyForm() {
     defaultValues,
   })
 
-  function onSubmit(data: CompanyFormValues) {
-    // In a real app, you would save this data to a database
+async function onSubmit(data: CompanyFormValues) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    toast?.({
+      title: "Authentication Error",
+      description: "You need to be logged in to submit",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  try {
+    
+    // Step 1: Proceed with company creation if the user doesn't have one
+    const response = await apiClient.post(
+      `${REACT_APP_API_BASE}/companies`,
+      {
+        name: data.name,
+        city: data.city,
+        state: data.state,
+        country: data.country,
+        industryType: data.industryType,
+        companySize: data.companySize,
+        techStacks: Array.isArray(data.techStacks) ? data.techStacks : [],
+        perks: Array.isArray(data.perks) ? data.perks : [],
+        domains: domains || [],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("Company created successfully:", response.data);
     toast({
-      title: editingCompany ? "Company Updated" : "Company Created",
-      description: `Successfully ${editingCompany ? "updated" : "created"} ${data.name}`,
-    })
+      title: "Success",
+      description: "Company added successfully!",
+      variant: "success",
+    });
+  } catch (error: any) {
+    console.error("Error saving company:", error.response?.data || error.message);
 
-    console.log("Company data:", data)
-    console.log("Domains:", domains)
-
-    // Reset form if creating a new company
-    if (!editingCompany) {
-      form.reset(defaultValues)
-      setDomains([])
+    if (error.response?.status === 403) {
+      toast({
+        title: "Permission Denied",
+        description: "You do not have permission to create a company. Contact admin.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to save company",
+        variant: "destructive",
+      });
     }
   }
+}
+
+
+
 
   function addDomain(domain: DomainType) {
     setDomains([...domains, domain])
@@ -116,25 +166,25 @@ export function CompanyForm() {
     })
   }
 
-  function updateDomain(index: number, updatedDomain: DomainType) {
-    const updatedDomains = [...domains]
-    updatedDomains[index] = updatedDomain
-    setDomains(updatedDomains)
-    setActiveTab("company")
-    toast({
-      title: "Domain Updated",
-      description: `Successfully updated domain: ${updatedDomain.name}`,
-    })
-  }
+  // function updateDomain(index: number, updatedDomain: DomainType) {
+  //   const updatedDomains = [...domains]
+  //   updatedDomains[index] = updatedDomain
+  //   setDomains(updatedDomains)
+  //   setActiveTab("company")
+  //   toast({
+  //     title: "Domain Updated",
+  //     description: `Successfully updated domain: ${updatedDomain.name}`,
+  //   })
+  // }
 
-  function removeDomain(index: number) {
-    const updatedDomains = domains.filter((_, i) => i !== index)
-    setDomains(updatedDomains)
-    toast({
-      title: "Domain Removed",
-      description: "Domain has been removed successfully",
-    })
-  }
+  // function removeDomain(index: number) {
+  //   const updatedDomains = domains.filter((_, i) => i !== index)
+  //   setDomains(updatedDomains)
+  //   toast({
+  //     title: "Domain Removed",
+  //     description: "Domain has been removed successfully",
+  //   })
+  // }
 
   return (
     <div className="space-y-6 ">
@@ -311,46 +361,6 @@ export function CompanyForm() {
                       )}
                     />
                   </div>
-
-                  {domains.length > 0 && (
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium">Domains</h3>
-                      <div className="grid grid-cols-1 gap-4">
-                        {domains.map((domain, index) => (
-                          <Card key={index} className="bg-muted/50">
-                            <CardHeader className="p-4 pb-2">
-                              <div className="flex justify-between items-center">
-                                <CardTitle className="text-base">{domain.name}</CardTitle>
-                                <div className="flex gap-2">
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => {
-                                      setActiveTab("domains")
-                                      // In a real app, you would set the domain to edit
-                                    }}
-                                  >
-                                    Edit
-                                  </Button>
-                                  <Button variant="destructive" size="sm" onClick={() => removeDomain(index)}>
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </div>
-                              </div>
-                            </CardHeader>
-                            <CardContent className="p-4 pt-2">
-                              <p className="text-sm text-muted-foreground">
-                                <strong>Requirements:</strong> {domain.requirements}
-                              </p>
-                              <p className="text-sm text-muted-foreground">
-                                <strong>Stipend:</strong> {domain.stipendAmount}
-                              </p>
-                            </CardContent>
-                          </Card>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <Button type="button" variant="outline" onClick={() => setActiveTab("domains")}>
