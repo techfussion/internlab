@@ -53,7 +53,7 @@ model Company {
   state                   String
   country                 String
   otherOfficeLocations    String[]
-  industryType            String[]
+  industryType            String
   companySize             String?
   established             DateTime?
   techStacks              String[]

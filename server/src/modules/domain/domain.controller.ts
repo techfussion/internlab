@@ -11,7 +11,7 @@ export class DomainController {
   constructor(private readonly domainService: DomainService) {}
 
   @Post()
-  @Roles('ADMIN')
+  // @Roles('ADMIN')
   @UseGuards(JwtAuthGuard)
   create(@Body() createDomainDto: CreateDomainDto) {
     return this.domainService.create(createDomainDto);

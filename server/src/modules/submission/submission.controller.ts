@@ -36,7 +36,7 @@ import {
   
     @Get()
     @UseGuards(RolesGuard)
-    @Roles(Role.ADMIN)
+    // @Roles(Role.ADMIN)
     async findAll(@Query() query: QuerySubmissionDto): Promise<SubmissionResponseDto[]> {
       return this.submissionService.findAll(query);
     }

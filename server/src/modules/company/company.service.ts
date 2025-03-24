@@ -91,9 +91,9 @@ export class CompanyService extends BaseService {
       where.state = { equals: dto.state, mode: 'insensitive' };
     }
   
-    if (dto.industryType?.length) {
-      where.industryType = { hasSome: dto.industryType };
-    }
+   if (dto.industryType) {
+     where.industryType = dto.industryType; 
+   }
   
     if (dto.verified !== undefined) {
       where.verified = dto.verified;

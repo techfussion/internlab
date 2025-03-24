@@ -1,5 +1,15 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsEnum, IsString, IsOptional, IsArray, IsUrl, IsEmail, IsPhoneNumber, IsDate, IsBoolean } from 'class-validator';
+import {
+  IsEnum,
+  IsString,
+  IsOptional,
+  IsArray,
+  IsUrl,
+  IsEmail,
+  IsPhoneNumber,
+  IsDate,
+  IsBoolean,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { PageOptionsDto } from 'src/modules/common/dto/page-options.dto';
 import { Prisma } from '@prisma/client';
@@ -7,7 +17,7 @@ import { Prisma } from '@prisma/client';
 export enum CompanyOrderBy {
   RATING = 'avgRating',
   REVIEWS = 'totalReviews',
-  CREATED_AT = 'createdAt'
+  CREATED_AT = 'createdAt',
 }
 
 export class FindAllCompaniesDto extends PageOptionsDto {
@@ -24,10 +34,9 @@ export class FindAllCompaniesDto extends PageOptionsDto {
   state?: string;
 
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
+  @IsString()
   @Type(() => String)
-  industryType?: string[];
+  industryType?: string;
 
   @IsOptional()
   @IsBoolean()
@@ -107,9 +116,9 @@ export class CreateCompanyDto {
   @IsString({ each: true })
   otherOfficeLocations?: string[];
 
-  @IsArray()
+
   @IsString({ each: true })
-  industryType: string[];
+  industryType: string;
 
   @IsOptional()
   @IsString()
@@ -138,6 +147,6 @@ export class CreateCompanyDto {
   @IsOptional()
   @IsBoolean()
   verified?: boolean;
-} 
+}
 
 export class UpdateCompanyDto extends PartialType(CreateCompanyDto) {}

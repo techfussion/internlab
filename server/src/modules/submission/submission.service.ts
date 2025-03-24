@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateSubmissionDto,
@@ -20,16 +24,21 @@ export class SubmissionService {
   ): Promise<SubmissionResponseDto> {
     const { type, data, companyId } = createSubmissionDto;
 
+    if (!userId) {
+      throw new BadRequestException('User ID is required');
+    }
+
+    if (!companyId) {
+      throw new BadRequestException('Company ID is required');
+    }
+
     const submission = await this.prisma.submission.create({
       data: {
         type,
         data: data as unknown as Prisma.InputJsonValue,
-        userId,
-        companyId: companyId || 
-        (type === SubmissionType.NEW_COMPANY 
-          ? null 
-          : 'companyId' in data ? String(data.companyId) : null),
         status: SubmissionStatus.PENDING,
+        userId, 
+        companyId, 
       },
       include: {
         user: {
@@ -47,7 +56,7 @@ export class SubmissionService {
 
   async findAll(params: QuerySubmissionDto): Promise<SubmissionResponseDto[]> {
     const { skip, take, status, type } = params;
-    
+
     const submissions = await this.prisma.submission.findMany({
       skip,
       take,
@@ -156,7 +165,9 @@ export class SubmissionService {
 
       return this.mapToResponseDto(result);
     } catch (error) {
-      throw new BadRequestException('Failed to apply submission changes: ' + error.message);
+      throw new BadRequestException(
+        'Failed to apply submission changes: ' + error.message,
+      );
     }
   }
 
